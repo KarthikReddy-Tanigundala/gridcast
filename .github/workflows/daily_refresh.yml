@@ -1,0 +1,80 @@
+name: Daily forecast refresh
+
+# 02:35 UTC = 12:35 AEST (UTC+10 all year — the NEM ignores daylight saving). By then AEMO's
+# dashboard feed has today's actuals to 12:00 and the 12:30 PREDISPATCH run is published, so the
+# live forecast follows exactly the backtest protocol (12:00 origin, tomorrow's 48 half-hours).
+on:
+  schedule:
+    - cron: "35 2 * * *"
+  workflow_dispatch:
+    inputs:
+      snapshot:
+        description: "Also commit the raw data partitions and retrain the models"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: |
+          pip install -r requirements.txt
+          pip install -e .
+
+      # Incremental: only months since the committed snapshot are downloaded.
+      - name: Fetch AEMO actuals (monthly CSV + same-day dashboard top-up)
+        run: python -m gridcast.data.fetch_actuals
+      - name: Fetch weather (Open-Meteo history + live forecast)
+        run: python -m gridcast.data.fetch_weather
+      - name: Fetch AEMO PREDISPATCH (latest runs)
+        run: python -m gridcast.data.fetch_aemo_forecasts
+
+      - name: Build dataset
+        run: python -m gridcast.data.build_dataset
+
+      # Monthly (3rd of the month) or on demand: refresh the committed raw snapshot and retrain.
+      - name: Decide whether to snapshot
+        id: snap
+        run: |
+          if [ "${{ inputs.snapshot }}" = "true" ] || [ "$(date -u +%d)" = "03" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Retrain models
+        if: steps.snap.outputs.run == 'true'
+        run: python -m gridcast.train
+
+      - name: Forecast tomorrow
+        run: python -m gridcast.predict
+
+      - name: Commit
+        run: |
+          git config user.name "gridcast-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/forecasts data/raw/weather_forecast_latest.parquet
+          if [ "${{ steps.snap.outputs.run }}" = "true" ]; then
+            git add data/raw models
+          fi
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git commit -m "Daily forecast: $(TZ=Etc/GMT-10 date +%F) (AEST)"
+          git push

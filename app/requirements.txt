@@ -1,0 +1,13 @@
+# Lean runtime for Streamlit Community Cloud: the app only reads committed artifacts and runs the
+# committed LightGBM model for the what-if tab. No data fetching, no statsforecast.
+streamlit==1.66.0
+plotly==7.1.0
+pandas==2.3.3
+numpy==2.5.4
+pyarrow==26.0.0
+pyyaml==6.0.3
+holidays==0.107
+lightgbm==4.7.0
+mlforecast==1.1.0
+scikit-learn==1.9.1
+joblib==1.6.0

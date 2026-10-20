@@ -1,0 +1,25 @@
+# GridCast — pinned to the versions the backtest was produced with (Python 3.12).
+# ---- AEMO data ----
+nemosis==3.8.1            # MMSDM tables (alternative actuals path + rooftop PV); nemseer is NOT used (see CLAUDE.md §16)
+requests==2.34.2
+# ---- Data ----
+pandas==2.3.3
+numpy==2.5.4
+pyarrow==26.0.0
+pyyaml==6.0.3
+holidays==0.107           # VIC public holidays
+python-dotenv==1.2.4
+# ---- Modelling (Nixtla suite + LightGBM) ----
+statsforecast==2.1.1      # AutoETS, MSTL-ETS/ARIMA/ARIMAX
+mlforecast==1.1.0         # LightGBM workhorse (lags, rolling features)
+utilsforecast==0.2.17
+lightgbm==4.7.0
+scikit-learn==1.9.1
+scipy==1.18.1
+joblib==1.6.0
+# ---- Dashboard ----
+streamlit==1.66.0
+plotly==7.1.0
+# ---- Quality gates ----
+pytest==9.1.1
+ruff==0.17.1
