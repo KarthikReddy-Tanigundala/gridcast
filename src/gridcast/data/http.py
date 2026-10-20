@@ -12,12 +12,16 @@ import requests
 logger = logging.getLogger(__name__)
 
 _CONTACT = os.getenv("GRIDCAST_CONTACT", "").strip()
-USER_AGENT = "GridCast/0.1 (portfolio forecasting research" + (f"; {_CONTACT})" if _CONTACT else ")")
+USER_AGENT = "GridCast/0.1 (portfolio forecasting research" + (
+    f"; {_CONTACT})" if _CONTACT else ")"
+)
 # AEMO's CDN rejects some non-browser agents; a browser-compatible prefix keeps the CSV path working.
 HEADERS = {"User-Agent": f"Mozilla/5.0 (compatible; {USER_AGENT})"}
 
 
-def get(url: str, *, params: dict | None = None, timeout: int = 120, retries: int = 4) -> requests.Response:
+def get(
+    url: str, *, params: dict | None = None, timeout: int = 120, retries: int = 4
+) -> requests.Response:
     """GET with exponential backoff on network errors, 429 and 5xx."""
     delay = 2.0
     for attempt in range(1, retries + 1):
@@ -29,7 +33,9 @@ def get(url: str, *, params: dict | None = None, timeout: int = 120, retries: in
         except (requests.ConnectionError, requests.Timeout, requests.HTTPError) as exc:
             if attempt == retries:
                 raise
-            logger.warning("GET %s failed (%s) — retry %d/%d in %.0fs", url, exc, attempt, retries, delay)
+            logger.warning(
+                "GET %s failed (%s) — retry %d/%d in %.0fs", url, exc, attempt, retries, delay
+            )
             time.sleep(delay)
             delay *= 2
     raise RuntimeError("unreachable")

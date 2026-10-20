@@ -32,3 +32,7 @@ Thumbs.db
 
 # ---- Local tool config ----
 .claude/
+
+# ---- Rebuildable intermediates ----
+data/processed/
+results/backtest_demand_alldaily.parquet

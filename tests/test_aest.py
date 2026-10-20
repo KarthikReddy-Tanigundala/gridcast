@@ -55,7 +55,10 @@ def test_five_min_to_30min_is_interval_ending():
     ts = pd.date_range("2024-01-15 00:05", periods=12, freq="5min")
     df = pd.DataFrame({"ds": ts, "rrp": [10.0] * 6 + [40.0] * 6})
     out = aest.five_min_to_interval(df, ["rrp"])
-    assert out["ds"].tolist() == [pd.Timestamp("2024-01-15 00:30"), pd.Timestamp("2024-01-15 01:00")]
+    assert out["ds"].tolist() == [
+        pd.Timestamp("2024-01-15 00:30"),
+        pd.Timestamp("2024-01-15 01:00"),
+    ]
     assert out["rrp"].tolist() == [10.0, 40.0]
     assert out["n_sub_intervals"].tolist() == [6, 6]
 

@@ -28,6 +28,7 @@ import pandas as pd
 
 from gridcast import config
 from gridcast.data.http import download
+from gridcast.data.storage import read_partitions, write_partitions
 from gridcast.utils.aest import five_min_to_interval, now_aest, parse_aemo_timestamp
 from gridcast.utils.logging_config import setup_logging
 
@@ -35,12 +36,34 @@ logger = logging.getLogger(__name__)
 
 CSV_URL = "https://www.aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_{ym}_{region}.csv"
 CACHE = config.DATA_CACHE / "aemo_price_demand"
-OUT = config.DATA_RAW / "vic1_actuals_30min.parquet"
-ROOFTOP_OUT = config.DATA_RAW / "vic1_rooftop_pv_30min.parquet"
+OUT_DIR = config.DATA_RAW / "actuals"  # vic1_actuals_<YYYY>.parquet
+PREFIX = "vic1_actuals"
+ROOFTOP_DIR = config.DATA_RAW / "rooftop_pv"
+ROOFTOP_PREFIX = "vic1_rooftop_pv"
+
+
+def load() -> pd.DataFrame:
+    """All committed VIC1 actuals (``ds, demand_mw, rrp, n_sub_intervals, settlement``)."""
+    df = read_partitions(OUT_DIR, PREFIX)
+    if df is None:
+        raise FileNotFoundError(
+            f"no actuals in {OUT_DIR} — run `python -m gridcast.data.fetch_actuals`"
+        )
+    return df.sort_values("ds").reset_index(drop=True)
+
+
+def load_rooftop() -> pd.DataFrame | None:
+    return read_partitions(ROOFTOP_DIR, ROOFTOP_PREFIX)
 
 
 def month_starts(start: date, end_exclusive: date) -> list[pd.Timestamp]:
-    return list(pd.date_range(pd.Timestamp(start).replace(day=1), pd.Timestamp(end_exclusive) - pd.Timedelta(days=1), freq="MS"))
+    return list(
+        pd.date_range(
+            pd.Timestamp(start).replace(day=1),
+            pd.Timestamp(end_exclusive) - pd.Timedelta(days=1),
+            freq="MS",
+        )
+    )
 
 
 def parse_price_demand_csv(raw: pd.DataFrame, region: str, minutes: int = 30) -> pd.DataFrame:
@@ -61,14 +84,18 @@ def parse_price_demand_csv(raw: pd.DataFrame, region: str, minutes: int = 30) ->
 
 def fetch_month(month: pd.Timestamp, region: str, *, refresh: bool) -> pd.DataFrame | None:
     ym = month.strftime("%Y%m")
-    path = download(CSV_URL.format(ym=ym, region=region), CACHE / f"{ym}_{region}.csv", overwrite=refresh)
+    path = download(
+        CSV_URL.format(ym=ym, region=region), CACHE / f"{ym}_{region}.csv", overwrite=refresh
+    )
     if path is None:
         logger.warning("No AEMO file for %s yet", ym)
         return None
     return parse_price_demand_csv(pd.read_csv(path), region)
 
 
-def fetch_csv(start: date, end_exclusive: date, region: str, *, refresh_from: pd.Timestamp | None) -> pd.DataFrame:
+def fetch_csv(
+    start: date, end_exclusive: date, region: str, *, refresh_from: pd.Timestamp | None
+) -> pd.DataFrame:
     frames = []
     for m in month_starts(start, end_exclusive):
         # Re-download months that may still be changing (the current and the previous one).
@@ -76,7 +103,12 @@ def fetch_csv(start: date, end_exclusive: date, region: str, *, refresh_from: pd
         frame = fetch_month(m, region, refresh=refresh)
         if frame is not None:
             frames.append(frame)
-            logger.info("%s: %d intervals (%s)", m.strftime("%Y-%m"), len(frame), frame["settlement"].iloc[0])
+            logger.info(
+                "%s: %d intervals (%s)",
+                m.strftime("%Y-%m"),
+                len(frame),
+                frame["settlement"].iloc[0],
+            )
     return pd.concat(frames, ignore_index=True)
 
 
@@ -89,8 +121,24 @@ def fetch_nemosis(start: date, end_exclusive: date, region: str) -> pd.DataFrame
     s = pd.Timestamp(start).strftime("%Y/%m/%d %H:%M:%S")
     e = pd.Timestamp(end_exclusive).strftime("%Y/%m/%d %H:%M:%S")
     flt = {"filter_cols": ["REGIONID", "INTERVENTION"], "filter_values": ([region], [0])}
-    demand = dynamic_data_compiler(s, e, "DISPATCHREGIONSUM", str(cache), select_columns=["SETTLEMENTDATE", "REGIONID", "INTERVENTION", "TOTALDEMAND"], fformat="parquet", **flt)
-    price = dynamic_data_compiler(s, e, "DISPATCHPRICE", str(cache), select_columns=["SETTLEMENTDATE", "REGIONID", "INTERVENTION", "RRP"], fformat="parquet", **flt)
+    demand = dynamic_data_compiler(
+        s,
+        e,
+        "DISPATCHREGIONSUM",
+        str(cache),
+        select_columns=["SETTLEMENTDATE", "REGIONID", "INTERVENTION", "TOTALDEMAND"],
+        fformat="parquet",
+        **flt,
+    )
+    price = dynamic_data_compiler(
+        s,
+        e,
+        "DISPATCHPRICE",
+        str(cache),
+        select_columns=["SETTLEMENTDATE", "REGIONID", "INTERVENTION", "RRP"],
+        fformat="parquet",
+        **flt,
+    )
     df = demand.merge(price, on=["SETTLEMENTDATE", "REGIONID", "INTERVENTION"])
     df = df.rename(columns={"REGIONID": "REGION"})
     return parse_price_demand_csv(df, region)
@@ -106,8 +154,11 @@ def fetch_rooftop_pv(start: date, end_exclusive: date, region: str) -> pd.DataFr
         df = dynamic_data_compiler(
             pd.Timestamp(start).strftime("%Y/%m/%d %H:%M:%S"),
             pd.Timestamp(end_exclusive).strftime("%Y/%m/%d %H:%M:%S"),
-            "ROOFTOP_PV_ACTUAL", str(cache), fformat="parquet",
-            filter_cols=["REGIONID"], filter_values=([region],),
+            "ROOFTOP_PV_ACTUAL",
+            str(cache),
+            fformat="parquet",
+            filter_cols=["REGIONID"],
+            filter_values=([region],),
         )
     except Exception as exc:  # optional enrichment — never block the core pipeline
         logger.warning("Rooftop PV fetch skipped: %s", exc)
@@ -121,6 +172,42 @@ def fetch_rooftop_pv(start: date, end_exclusive: date, region: str) -> pd.DataFr
     return df[["ds"]].assign(rooftop_pv_mw=df["POWER"].to_numpy()).reset_index(drop=True)
 
 
+DASHBOARD_URL = "https://visualisations.aemo.com.au/aemo/apps/api/report/5MIN"
+
+
+def fetch_recent_dashboard(region: str) -> pd.DataFrame | None:
+    """Same-day top-up: the last ~24 h of 5-minute actuals from AEMO's public data dashboard feed.
+
+    The monthly CSV is only refreshed to midnight, so this is what lets the daily job issue a true
+    12:00 forecast (the backtest protocol). Values are preliminary; the monthly CSV supersedes them
+    on the next refresh. Best-effort: returns None on any failure.
+    """
+    import requests
+
+    from gridcast.data.http import HEADERS
+
+    try:
+        r = requests.post(DASHBOARD_URL, json={"timeScale": ["30MIN"]}, headers=HEADERS, timeout=60)
+        r.raise_for_status()
+        raw = pd.DataFrame(r.json()["5MIN"])
+    except Exception as exc:
+        logger.warning("AEMO dashboard top-up skipped: %s", exc)
+        return None
+    raw = raw[(raw["REGIONID"] == region) & (raw["PERIODTYPE"] == "ACTUAL")]
+    if raw.empty:
+        return None
+    df = pd.DataFrame(
+        {
+            "ds": parse_aemo_timestamp(raw["SETTLEMENTDATE"].str.replace("T", " ")),
+            "demand_mw": raw["TOTALDEMAND"].astype(float),
+            "rrp": raw["RRP"].astype(float),
+        }
+    )
+    out = five_min_to_interval(df.sort_values("ds"), ["demand_mw", "rrp"])
+    out["settlement"] = "5min"
+    return out[out["n_sub_intervals"] == 6]
+
+
 def validate_against_nemosis(month: str, region: str) -> pd.DataFrame:
     """Cross-check one month of the CSV path against nemosis (VIC1, INTERVENTION=0)."""
     m = pd.Timestamp(month + "-01")
@@ -130,50 +217,66 @@ def validate_against_nemosis(month: str, region: str) -> pd.DataFrame:
     both = csv.merge(nem, on="ds", suffixes=("_csv", "_nemosis"))
     diff = {
         "intervals_compared": len(both),
-        "demand_max_abs_diff": float((both["demand_mw_csv"] - both["demand_mw_nemosis"]).abs().max()),
+        "demand_max_abs_diff": float(
+            (both["demand_mw_csv"] - both["demand_mw_nemosis"]).abs().max()
+        ),
         "rrp_max_abs_diff": float((both["rrp_csv"] - both["rrp_nemosis"]).abs().max()),
     }
     logger.info("CSV vs nemosis %s: %s", month, diff)
     return both
 
 
-def run(source: str | None = None, *, full_refresh: bool = False, with_rooftop: bool = True) -> pd.DataFrame:
+def run(
+    source: str | None = None, *, full_refresh: bool = False, with_rooftop: bool = False
+) -> pd.DataFrame:
+    """Incremental by default: only months from the last committed one onwards are (re)downloaded
+    (the current month's file is revised daily by AEMO), so a fresh CI checkout fetches ~2 files."""
     s = config.get_settings()
     source = source or s.data.source
     today = now_aest()
     end_exclusive = max(s.data.history_end, (today + pd.Timedelta(days=1)).date())
-    refresh_from = None if full_refresh else (today.normalize().replace(day=1) - pd.offsets.MonthBegin(1))
-    if full_refresh:
-        refresh_from = pd.Timestamp(s.data.history_start)
+    existing = None if full_refresh else read_partitions(OUT_DIR, PREFIX)
+    if existing is None:
+        start, refresh_from = s.data.history_start, pd.Timestamp(s.data.history_start)
+    else:
+        last_month = existing["ds"].max().normalize().replace(day=1) - pd.offsets.MonthBegin(1)
+        start, refresh_from = last_month.date(), last_month
 
     if source == "nemosis":
-        df = fetch_nemosis(s.data.history_start, end_exclusive, s.region)
+        new = fetch_nemosis(start, end_exclusive, s.region)
     elif source == "aemo_csv":
-        df = fetch_csv(s.data.history_start, end_exclusive, s.region, refresh_from=refresh_from)
+        new = fetch_csv(start, end_exclusive, s.region, refresh_from=refresh_from)
     else:
         raise ValueError(f"unknown source {source!r}")
 
-    df = df[df["ds"] > pd.Timestamp(s.data.history_start)].drop_duplicates("ds").sort_values("ds")
+    frames = [new] if existing is None else [existing, new]
+    recent = fetch_recent_dashboard(s.region) if source == "aemo_csv" else None
+    if recent is not None:  # only fills intervals after the CSV ends; the CSV wins on overlap
+        frames.insert(0, recent)
+    df = pd.concat(frames, ignore_index=True)
+    df = (
+        df[df["ds"] > pd.Timestamp(s.data.history_start)]
+        .drop_duplicates("ds", keep="last")
+        .sort_values("ds")
+    )
     # Only keep complete 30-minute intervals (a partial final interval would bias the mean).
     df = df[(df["settlement"] == "30min") | (df["n_sub_intervals"] == 6)].reset_index(drop=True)
     df["n_sub_intervals"] = df["n_sub_intervals"].astype("int8")
-    config.DATA_RAW.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(OUT, index=False)
-    logger.info("Wrote %s: %d rows, %s → %s", OUT.name, len(df), df["ds"].min(), df["ds"].max())
+    write_partitions(df, OUT_DIR, PREFIX)
+    logger.info("Actuals: %d rows, %s → %s", len(df), df["ds"].min(), df["ds"].max())
 
     if with_rooftop:
-        start = s.data.history_start
-        if ROOFTOP_OUT.exists() and not full_refresh:
-            existing = pd.read_parquet(ROOFTOP_OUT)
-            start = (existing["ds"].max() - pd.Timedelta(days=35)).date()
-        else:
-            existing = None
-        pv = fetch_rooftop_pv(start, s.data.history_end, s.region)
+        pv_old = None if full_refresh else load_rooftop()
+        pv_start = (
+            s.data.history_start
+            if pv_old is None
+            else (pv_old["ds"].max() - pd.Timedelta(days=35)).date()
+        )
+        pv = fetch_rooftop_pv(pv_start, end_exclusive, s.region)
         if pv is not None and len(pv):
-            if existing is not None:
-                pv = pd.concat([existing, pv]).drop_duplicates("ds", keep="last")
-            pv.sort_values("ds").to_parquet(ROOFTOP_OUT, index=False)
-            logger.info("Wrote %s: %d rows", ROOFTOP_OUT.name, len(pv))
+            if pv_old is not None:
+                pv = pd.concat([pv_old, pv]).drop_duplicates("ds", keep="last")
+            write_partitions(pv.sort_values("ds"), ROOFTOP_DIR, ROOFTOP_PREFIX)
     return df
 
 
@@ -182,13 +285,17 @@ def main() -> None:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--source", choices=["aemo_csv", "nemosis"], default=None)
     p.add_argument("--full-refresh", action="store_true", help="re-download every month")
-    p.add_argument("--no-rooftop", action="store_true")
+    p.add_argument(
+        "--rooftop",
+        action="store_true",
+        help="also fetch ROOFTOP_PV_ACTUAL via nemosis (slow, optional)",
+    )
     p.add_argument("--validate", metavar="YYYY-MM", help="cross-check one month CSV vs nemosis")
     a = p.parse_args()
     if a.validate:
         validate_against_nemosis(a.validate, config.get_settings().region)
         return
-    run(a.source, full_refresh=a.full_refresh, with_rooftop=not a.no_rooftop)
+    run(a.source, full_refresh=a.full_refresh, with_rooftop=a.rooftop)
 
 
 if __name__ == "__main__":

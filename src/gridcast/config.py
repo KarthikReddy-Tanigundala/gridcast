@@ -59,6 +59,7 @@ class FeatureSettings:
     rolling_windows: tuple[int, ...]
     hdd_cdd_base_c: float
     temp_lags_hours: tuple[int, ...]
+    trend: bool
 
 
 @dataclass(frozen=True)
@@ -74,6 +75,9 @@ class BacktestSettings:
     classical_train_days: int
     mase_season: int
     mase_scale_days: int
+    validation_start: date
+    validation_end: date
+    validation_stride_days: int
 
 
 @dataclass(frozen=True)
@@ -81,6 +85,7 @@ class IntervalSettings:
     levels: tuple[int, ...]
     conformal_windows: int
     calibration_days: int
+    aci_gamma: float
 
 
 @dataclass(frozen=True)
@@ -115,6 +120,7 @@ class Settings:
     backtest: BacktestSettings
     intervals: IntervalSettings
     lightgbm: dict[str, Any] = field(hash=False)
+    lightgbm_train_years: float | None = field(hash=False)
     price: PriceSettings = field(hash=False)
     aemo_benchmark: AemoBenchmarkSettings = field(hash=False)
     gates: dict[str, float] = field(hash=False)
@@ -157,23 +163,34 @@ def parse_settings(raw: dict[str, Any]) -> Settings:
             rolling_windows=_tuple(f["rolling_windows"]),
             hdd_cdd_base_c=float(f["hdd_cdd_base_c"]),
             temp_lags_hours=_tuple(f["temp_lags_hours"]),
+            trend=bool(f.get("trend", False)),
         ),
         backtest=BacktestSettings(
             eval_start=_d(b["eval_start"]),
             eval_end=_d(b["eval_end"]),
-            **{k: int(v) for k, v in b.items() if k not in ("eval_start", "eval_end")},
+            validation_start=_d(b["validation_start"]),
+            validation_end=_d(b["validation_end"]),
+            **{
+                k: int(v)
+                for k, v in b.items()
+                if k not in ("eval_start", "eval_end", "validation_start", "validation_end")
+            },
         ),
         intervals=IntervalSettings(
             levels=_tuple(i["levels"]),
             conformal_windows=int(i["conformal_windows"]),
             calibration_days=int(i["calibration_days"]),
+            aci_gamma=float(i.get("aci_gamma", 0.0)),
         ),
         lightgbm=dict(raw["lightgbm"]),
+        lightgbm_train_years=raw.get("lightgbm_train_years"),
         price=PriceSettings(**{k: float(v) for k, v in p.items()}),
         aemo_benchmark=AemoBenchmarkSettings(**{k: int(v) for k, v in a.items()}),
         gates={k: float(v) for k, v in raw["gates"].items()},
         deep_learning=DeepLearningSettings(
-            enabled=bool(dl["enabled"]), train_days=int(dl["train_days"]), max_steps=int(dl["max_steps"])
+            enabled=bool(dl["enabled"]),
+            train_days=int(dl["train_days"]),
+            max_steps=int(dl["max_steps"]),
         ),
     )
 

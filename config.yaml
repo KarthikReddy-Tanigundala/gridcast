@@ -23,9 +23,10 @@ weather:
   forecast_days: 16
 
 features:
-  lags: [1, 2, 48, 96, 336]       # 30-min steps: last two intervals, 1 day, 2 days, 1 week
+  lags: [72, 96, 144, 336, 672]   # >= horizon (72): direct day-ahead, never fed its own predictions
   rolling_windows: [48, 336]
   hdd_cdd_base_c: 18.0
+  trend: true                     # years-since-2019 feature: lets trees isolate the rooftop-PV era
   temp_lags_hours: [3, 24]
 
 backtest:
@@ -40,11 +41,19 @@ backtest:
   classical_train_days: 56        # trailing window for classical fits
   mase_season: 48                 # MASE scale = in-sample seasonal-naive (1 day) MAE
   mase_scale_days: 28             # ...measured on the trailing 28 days of training data
+  # Model/feature design is chosen on this validation year ONLY (weekly origins); the eval window
+  # above is scored once, untouched (`python -m gridcast.evaluation.backtest --validation`).
+  validation_start: "2023-01-01"
+  validation_end: "2023-12-31"
+  validation_stride_days: 7
 
 intervals:
   levels: [80, 95]
   conformal_windows: 8            # mlforecast conformal calibration windows
   calibration_days: 56            # rolling residual window for the backtest intervals
+  aci_gamma: 0.02                 # adaptive conformal step (Gibbs & Candes 2021); chosen on 2023 validation
+
+lightgbm_train_years: null        # optional recency cap in years; null = all (chosen on the 2023 validation year)
 
 lightgbm:
   n_estimators: 600

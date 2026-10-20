@@ -81,8 +81,13 @@ def hourly_start_to_interval_end(
     return out.rename_axis(ts_col).reset_index()
 
 
-def five_min_to_interval(df: pd.DataFrame, value_cols: list[str], minutes: int = 30,
-                         ts_col: str = "ds", how: str = "mean") -> pd.DataFrame:
+def five_min_to_interval(
+    df: pd.DataFrame,
+    value_cols: list[str],
+    minutes: int = 30,
+    ts_col: str = "ds",
+    how: str = "mean",
+) -> pd.DataFrame:
     """Aggregate 5-minute interval-ending data to ``minutes``-interval-ending data.
 
     The 30-minute interval ending 00:30 contains the six 5-minute intervals ending 00:05…00:30, so
@@ -90,12 +95,10 @@ def five_min_to_interval(df: pd.DataFrame, value_cols: list[str], minutes: int =
     the 30-minute *trading* price is exactly the mean of those six dispatch prices.
     """
     rule = f"{minutes}min"
-    agg = (
-        df.set_index(ts_col)[value_cols]
-        .resample(rule, closed="right", label="right")
-        .agg(how)
+    agg = df.set_index(ts_col)[value_cols].resample(rule, closed="right", label="right").agg(how)
+    counts = (
+        df.set_index(ts_col)[value_cols[0]].resample(rule, closed="right", label="right").count()
     )
-    counts = df.set_index(ts_col)[value_cols[0]].resample(rule, closed="right", label="right").count()
     agg["n_sub_intervals"] = counts
     return agg.reset_index()
 

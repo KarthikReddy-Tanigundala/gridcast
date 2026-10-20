@@ -22,6 +22,7 @@ import pandas as pd
 
 from gridcast import config
 from gridcast.data.http import get
+from gridcast.data.storage import read_partitions, write_partitions
 from gridcast.utils.aest import OPEN_METEO_TZ, now_aest
 from gridcast.utils.logging_config import setup_logging
 
@@ -32,12 +33,27 @@ HIST_FCST_URL = "https://historical-forecast-api.open-meteo.com/v1/forecast"
 PREV_RUNS_URL = "https://previous-runs-api.open-meteo.com/v1/forecast"
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 
-OUT = config.DATA_RAW / "weather_hourly.parquet"
+OUT_DIR = config.DATA_RAW / "weather"  # weather_hourly_<YYYY>.parquet
+PREFIX = "weather_hourly"
 LIVE_OUT = config.DATA_RAW / "weather_forecast_latest.parquet"
 
 
-def _request(url: str, variables: list[str], start: date | None = None, end: date | None = None,
-             extra: dict | None = None) -> pd.DataFrame:
+def load() -> pd.DataFrame:
+    df = read_partitions(OUT_DIR, PREFIX)
+    if df is None:
+        raise FileNotFoundError(
+            f"no weather in {OUT_DIR} — run `python -m gridcast.data.fetch_weather`"
+        )
+    return df.sort_values("ds").reset_index(drop=True)
+
+
+def _request(
+    url: str,
+    variables: list[str],
+    start: date | None = None,
+    end: date | None = None,
+    extra: dict | None = None,
+) -> pd.DataFrame:
     s = config.get_settings()
     params = {
         "latitude": s.location.latitude,
@@ -52,7 +68,9 @@ def _request(url: str, variables: list[str], start: date | None = None, end: dat
     r.raise_for_status()
     payload = r.json()
     if payload.get("utc_offset_seconds") != 36000:
-        raise ValueError(f"Open-Meteo returned offset {payload.get('utc_offset_seconds')}, expected UTC+10")
+        raise ValueError(
+            f"Open-Meteo returned offset {payload.get('utc_offset_seconds')}, expected UTC+10"
+        )
     df = pd.DataFrame(payload["hourly"])
     df["ds"] = pd.to_datetime(df.pop("time"))
     return df
@@ -99,7 +117,11 @@ def fetch_dayahead(start: date, end: date) -> pd.DataFrame:
 
 def fetch_live_forecast() -> pd.DataFrame:
     s = config.get_settings()
-    df = _request(FORECAST_URL, list(s.weather.variables), extra={"forecast_days": s.weather.forecast_days, "past_days": 2})
+    df = _request(
+        FORECAST_URL,
+        list(s.weather.variables),
+        extra={"forecast_days": s.weather.forecast_days, "past_days": 2},
+    )
     df["issued_at"] = now_aest().floor("h")
     return df
 
@@ -109,9 +131,8 @@ def run(*, full_refresh: bool = False) -> pd.DataFrame:
     today = now_aest().date()
     end = today - pd.Timedelta(days=1)  # archives lag; yesterday is the last complete day
     start = s.data.history_start - pd.Timedelta(days=14)  # warm-up for lagged temperature features
-    existing = None
-    if OUT.exists() and not full_refresh:
-        existing = pd.read_parquet(OUT)
+    existing = None if full_refresh else read_partitions(OUT_DIR, PREFIX)
+    if existing is not None:
         start = (existing["ds"].max() - pd.Timedelta(days=10)).date()  # re-pull recent (revisions)
 
     obs = fetch_observed(start, end)
@@ -120,13 +141,14 @@ def run(*, full_refresh: bool = False) -> pd.DataFrame:
     if existing is not None:
         df = pd.concat([existing[existing["ds"] < df["ds"].min()], df], ignore_index=True)
     df = df.drop_duplicates("ds", keep="last").sort_values("ds").reset_index(drop=True)
-    config.DATA_RAW.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(OUT, index=False)
-    logger.info("Wrote %s: %d hours, %s → %s", OUT.name, len(df), df["ds"].min(), df["ds"].max())
+    write_partitions(df, OUT_DIR, PREFIX)
+    logger.info("Weather: %d hours, %s → %s", len(df), df["ds"].min(), df["ds"].max())
 
     live = fetch_live_forecast()
     live.to_parquet(LIVE_OUT, index=False)
-    logger.info("Wrote %s: %d hours (issued %s)", LIVE_OUT.name, len(live), live["issued_at"].iloc[0])
+    logger.info(
+        "Wrote %s: %d hours (issued %s)", LIVE_OUT.name, len(live), live["issued_at"].iloc[0]
+    )
     return df
 
 
