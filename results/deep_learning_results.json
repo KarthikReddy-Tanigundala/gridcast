@@ -1,0 +1,21 @@
+{
+  "target": "demand",
+  "n_origins": 139,
+  "refit_weeks": 13,
+  "train_days": 365,
+  "max_steps": 400,
+  "table": [
+    {
+      "model": "NHITS",
+      "MASE": 1.0811648777776368,
+      "MAE": 530.0940119235178,
+      "RMSE": 686.1694994836046
+    },
+    {
+      "model": "LightGBM",
+      "MASE": 0.4789544240876037,
+      "MAE": 232.16822190977686,
+      "RMSE": 320.9730529927438
+    }
+  ]
+}

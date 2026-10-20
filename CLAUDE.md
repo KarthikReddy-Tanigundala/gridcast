@@ -144,22 +144,19 @@ from nemosis import dynamic_data_compiler
 
 # 5-minute dispatch price (RRP) — the core price target
 price = dynamic_data_compiler(
-    '2017/01/01 00:00:00', '2025/01/01 00:00:00',
-    'DISPATCHPRICE', '/path/to/cache'
+    "2017/01/01 00:00:00", "2025/01/01 00:00:00", "DISPATCHPRICE", "/path/to/cache"
 )
 # Filter: REGIONID == 'VIC1' AND INTERVENTION == 0
 
 # Regional demand
 demand = dynamic_data_compiler(
-    '2017/01/01 00:00:00', '2025/01/01 00:00:00',
-    'DISPATCHREGIONSUM', '/path/to/cache'
+    "2017/01/01 00:00:00", "2025/01/01 00:00:00", "DISPATCHREGIONSUM", "/path/to/cache"
 )
 # TOTALDEMAND field, REGIONID == 'VIC1', INTERVENTION == 0
 
 # Rooftop PV actuals (for underlying vs operational analysis)
 rooftop = dynamic_data_compiler(
-    '2017/01/01 00:00:00', '2025/01/01 00:00:00',
-    'ROOFTOP_PV_ACTUAL', '/path/to/cache'
+    "2017/01/01 00:00:00", "2025/01/01 00:00:00", "ROOFTOP_PV_ACTUAL", "/path/to/cache"
 )
 ```
 
@@ -788,3 +785,32 @@ PHASE 8 — FINAL POLISH
 *Generated for Karthik Reddy Tanigundala — RMIT Master of Data Science 2026*
 *Target: Melbourne Data Scientist / Data Analyst / energy-sector roles, AUD $90k–$160k band*
 *Supporting Project 3 of 5 — builds on real ReAmped Energy / Electric Kiwi domain experience*
+
+---
+
+## 16. ERRATA & BUILD DECISIONS (v1.1, 2026-10-20) — override §1–15 where they conflict
+
+Each item was verified against live sources or measured on the 2023 validation year at build time.
+Each is also an interview talking point.
+
+| # | Spec said | Reality / decision | Why |
+|---|---|---|---|
+| 1 | Benchmark via `nemseer` 1.0.7 | **Own PREDISPATCH reader** (`data/fetch_aemo_forecasts.py`) | nemseer (last release Nov 2023, `requires_python <3.12`) scrapes the old `PUBLIC_DVD_*` archive names. AEMO renamed MMSDM files to `PUBLIC_ARCHIVE#<TABLE>#ALL#FILE01#…` from Aug 2024, so `nemseer.get_tables()` returns `[]` for every month we need. Reading the same AEMO files directly is ~150 lines. |
+| 2 | nemosis primary for actuals | **AEMO monthly Price & Demand CSV primary**; nemosis kept as alternative + cross-check (`fetch_actuals --validate YYYY-MM`) | Same TOTALDEMAND/RRP for VIC1, ~100x smaller than MMSDM table zips; the current-month file updates daily. A same-day top-up from AEMO's dashboard feed gives actuals to 12:00. |
+| 3 | NEMweb URL migration in 2026 | Verified 2026-10-20: MMSDM archive live to `MMSDM_2026_09`; CSV URL returns 200 | No change needed; fetchers log and degrade gracefully on 404. |
+| 4 | Library versions (§4) | statsforecast 2.1.1, mlforecast 1.1.0, lightgbm 4.7.0, neuralforecast 3.3.0 (optional), pandas 2.3.3, numpy 2.5.4, Python 3.12 | Pinned in `requirements.txt`. |
+| 5 | History 2017–2025 | **History 2019-01 → today; evaluation window 2024-02-01 → 2026-09-29 (972 daily origins)** | Open-Meteo's Previous-Runs API (the forecast issued the day before) covers temperature from Jan 2022 and every other variable from Feb 2024 only. So from Feb 2024, every weather input in the headline backtest is a genuine day-before forecast (asserted in code). |
+| 6 | "Use the Historical Forecast API (leakage-safe)" | **Previous-Runs `*_previous_day1`** for day-ahead weather; Historical Forecast / ERA5 only as fallback for training history | The Historical Forecast API stitches the first hours of each model run, so it is close to an analysis, not a day-ahead forecast. `weather_regime` records which source fed each interval. |
+| 7 | 5-min core / handle 2021 transition | **30-minute modelling grain**; post-Oct-2021 prices = mean of six 5-min RRPs (unit-tested) | Day-ahead is a half-hourly decision problem; same grain as AEMO PD. |
+| 8 | Lags 1, 48, 336 | **Lags 72, 96, 144, 336, 672 (all ≥ the 72-step horizon)** | With lag 1 the recursive forecast fed on its own errors (lag1 + lag2 = 97% of gain) and degraded from ~230 to ~560 MW across tomorrow. Lags ≥ horizon make it a **direct** day-ahead model. Validation 2023: MASE 0.564 → 0.517. |
+| 9 | — | **`trend_years` feature, all-history training** | Rooftop-PV growth shifts the midday level every year. Validation 2023: trend 0.472 vs 2-year window 0.504 vs neither 0.517. |
+| 10 | SARIMAX with AutoARIMA (season 48) | **MSTL (48 + 336) + ARIMA with temperature/HDD/CDD regressors** ("MSTL-ARIMAX") | Seasonal AutoARIMA at lag 48 measured 175 s per fit (vs 2 s); MSTL deseasonalising is the standard multi-seasonal treatment. |
+| 11 | Demand → price coupling features | **Tested, off** | Price model with our demand forecast as input: validation MASE 0.705 vs 0.705 without. Simpler model kept; one flag re-enables it. |
+| 12 | Conformal intervals | **Rolling split-conformal + adaptive conformal inference (γ = 0.02)** | Plain rolling conformal under-covered on 2023 validation (80% → 0.738); ACI → 0.783 demand / 0.803 price. |
+| 13 | AEMO comparator unspecified | **First PD run covering all of tomorrow, published ≈12:33 AEST** | Earlier runs stop at 04:00 tomorrow. AEMO gets ~30 min more data; stated in every results table. |
+| 14 | Commit raw data daily | **Partitioned raw parquet; daily job commits forecasts only, raw snapshot monthly** | Re-committing ~16 MB of parquet per day would bloat git history by GBs per year. |
+| 15 | Record-low demand 1,594 MW (31 Dec 2023) | Superseded: **1,244 MW on 27 Dec 2025 (13:00)** in our data | Rooftop PV keeps pushing midday operational demand down. |
+| 16 | MPC trajectory | Only the current MPC ($20,300) is kept in config, for chart context | Avoids hardcoding unverified future values. |
+
+**Protocol discipline.** Every design choice above (lags, trend, training window, price objective, interval method) was chosen
+on the **2023 validation year** (`backtest --validation`, logged in `results/validation.json`) and the evaluation window was scored once.

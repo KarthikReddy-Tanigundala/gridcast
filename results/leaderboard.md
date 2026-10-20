@@ -1,6 +1,6 @@
 # GridCast leaderboard
 
-_Generated 2026-10-20 10:42 UTC by `python -m gridcast.evaluation.backtest`. All numbers are measured out of sample by walk-forward backtesting; nothing is hand-entered._
+_Generated 2026-10-20 10:48 UTC by `python -m gridcast.evaluation.backtest`. All numbers are measured out of sample by walk-forward backtesting; nothing is hand-entered._
 
 **Protocol.** One forecast per day issued at **12:00 AEST** for the whole of the **next day** (48 half-hours, 12.5–36 h ahead) — the day-ahead setting. Expanding-window refits every 28 days; weather inputs are the forecasts issued the day before (no hindsight weather). **MASE** = MAE ÷ in-sample MAE of a same-half-hour-yesterday forecast over the trailing 28 days (< 1 beats that naive rule). Intervals: rolling split-conformal with adaptive (ACI) correction; coverage measured, not assumed.
 
@@ -51,6 +51,15 @@ Gate: LightGBM demand MASE < 0.6 → **PASSED** (0.482).
 | Seasonal-naive (week) | 1.198 | 64.1 | 94.6 |
 | Naive | 1.364 | 70.8 | 95.9 |
 | AutoETS | 1.366 | 70.8 | 95.8 |
+
+## Deep learning vs LightGBM (demand, 139 weekly origins)
+
+NHITS (neuralforecast, CPU) trained on the trailing 365 days, refitted every 13 weeks, same day-before weather inputs.
+
+| Model | MASE | MAE (MW) | RMSE (MW) |
+|---|---|---|---|
+| NHITS | 1.081 | 530 | 686 |
+| LightGBM | 0.479 | 232 | 321 |
 
 ## Price spikes: P(RRP > $300/MWh) tomorrow
 
