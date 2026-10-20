@@ -1,0 +1,81 @@
+# GridCast configuration — every tunable lives here (CLAUDE.md §13: "config-driven, not hardcoded").
+# Loaded by src/gridcast/config.py into frozen dataclasses.
+
+region: VIC1
+
+location:
+  name: Melbourne
+  latitude: -37.81
+  longitude: 144.96
+
+data:
+  history_start: "2019-01-01"     # first interval-ending timestamp kept (AEST)
+  history_end: "2026-10-01"       # exclusive; last full month = Sep 2026
+  freq_minutes: 30                # modelling grain (5-min dispatch is averaged up; see §16)
+  five_min_settlement_start: "2021-10-01"
+  source: aemo_csv                # aemo_csv (default, VIC1-only monthly files) | nemosis
+
+weather:
+  variables: [temperature_2m, relative_humidity_2m, cloud_cover, shortwave_radiation, wind_speed_10m]
+  # Open-Meteo Historical Forecast API = the forecast that was available at the time (leakage-safe).
+  historical_forecast_start: "2022-01-01"
+  # Before that we fall back to ERA5 reanalysis (hindsight) and flag the regime.
+  forecast_days: 16
+
+features:
+  lags: [1, 2, 48, 96, 336]       # 30-min steps: last two intervals, 1 day, 2 days, 1 week
+  rolling_windows: [48, 336]
+  hdd_cdd_base_c: 18.0
+  temp_lags_hours: [3, 24]
+
+backtest:
+  eval_start: "2024-02-01"        # first origin: every weather input is a day-before forecast (§16)
+  eval_end: "2026-09-29"          # last origin: its target day (30 Sep) ends at the history boundary
+  origin_hour: 12                 # forecasts issued at 12:00 AEST, the day-ahead decision point
+  horizon_steps: 72               # 12:30 today → 24:00 tomorrow
+  scored_from_step: 25            # score only the next calendar day (steps 25..72 = 00:30..24:00)
+  refit_every_days: 28            # expanding-window refit cadence for the ML models
+  ml_origin_stride_days: 1        # LightGBM / baselines: every day
+  classical_origin_stride_days: 7 # AutoARIMA / AutoETS / MSTL: weekly origins (cost)
+  classical_train_days: 56        # trailing window for classical fits
+  mase_season: 48                 # MASE scale = in-sample seasonal-naive (1 day) MAE
+  mase_scale_days: 28             # ...measured on the trailing 28 days of training data
+
+intervals:
+  levels: [80, 95]
+  conformal_windows: 8            # mlforecast conformal calibration windows
+  calibration_days: 56            # rolling residual window for the backtest intervals
+
+lightgbm:
+  n_estimators: 600
+  learning_rate: 0.05
+  num_leaves: 63
+  min_child_samples: 40
+  subsample: 0.8
+  subsample_freq: 1
+  colsample_bytree: 0.8
+  reg_lambda: 1.0
+  random_state: 42
+  deterministic: true
+  force_row_wise: true
+  num_threads: 4
+  verbose: -1
+
+price:
+  spike_threshold: 300.0          # $/MWh — P(RRP > $300)
+  market_floor: -1000.0
+  market_price_cap: 20300.0       # MPC from 1 Jul 2025 (indexed annually; used for chart context only)
+  administered_price_cap: 600.0
+
+aemo_benchmark:
+  months: 12                      # PREDISPATCH runs are large: benchmark the last 12 months only
+  run_hour: 12                    # use the 12:30 AEST PD run (published after our 12:00 cut-off)
+  run_minute: 30
+
+gates:
+  demand_lightgbm_mase_max: 0.6
+
+deep_learning:
+  enabled: false                  # neuralforecast is optional (requirements-dl.txt)
+  train_days: 365
+  max_steps: 400

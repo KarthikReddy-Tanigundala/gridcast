@@ -1,0 +1,34 @@
+# ---- Secrets (none are needed, but never commit them) ----
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# ---- Python ----
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+.ruff_cache/
+
+# ---- Data ----
+# Raw downloads (nemosis/nemseer zips + CSVs, monthly AEMO files, PREDISPATCH runs) are large and
+# re-fetchable, so they live in data/cache/. The small, typed VIC1 parquet extracts in data/raw/ and
+# data/processed/ ARE committed so the backtest, CI and the dashboard run without network access.
+data/cache/
+
+# ---- Deep-learning checkpoints ----
+*.ckpt
+lightning_logs/
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ---- Local tool config ----
+.claude/
