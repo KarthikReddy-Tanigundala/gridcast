@@ -172,7 +172,8 @@ with tabs[2]:
                 ]
                 if c in lb
             ]
-            st.dataframe(lb[cols].style.format("{:,.3f}", na_rep="—"), use_container_width=True)
+            shown = lb[cols].astype(float).map(lambda v: "—" if pd.isna(v) else f"{v:,.3f}")
+            st.dataframe(shown, use_container_width=True)
             if r.get("leaderboard_weekly"):
                 with st.expander(
                     f"All models incl. classical ({r['n_classical_origins']} weekly origins)"
