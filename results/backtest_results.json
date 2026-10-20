@@ -1,0 +1,711 @@
+{
+  "generated_at": "2026-10-20T10:39:57+00:00",
+  "config": {
+    "backtest": {
+      "eval_start": "2024-02-01",
+      "eval_end": "2026-09-29",
+      "origin_hour": 12,
+      "horizon_steps": 72,
+      "scored_from_step": 25,
+      "refit_every_days": 28,
+      "ml_origin_stride_days": 1,
+      "classical_origin_stride_days": 7,
+      "classical_train_days": 56,
+      "mase_season": 48,
+      "mase_scale_days": 28,
+      "validation_start": "2023-01-01",
+      "validation_end": "2023-12-31",
+      "validation_stride_days": 7
+    },
+    "intervals": {
+      "levels": [
+        80,
+        95
+      ],
+      "conformal_windows": 8,
+      "calibration_days": 56,
+      "aci_gamma": 0.02
+    },
+    "lightgbm": {
+      "n_estimators": 600,
+      "learning_rate": 0.05,
+      "num_leaves": 63,
+      "min_child_samples": 40,
+      "subsample": 0.8,
+      "subsample_freq": 1,
+      "colsample_bytree": 0.8,
+      "reg_lambda": 1.0,
+      "random_state": 42,
+      "deterministic": true,
+      "force_row_wise": true,
+      "num_threads": 4,
+      "verbose": -1
+    }
+  },
+  "targets": {
+    "demand": {
+      "target": "demand",
+      "unit": "MW",
+      "eval_start": "2024-02-01 12:00:00",
+      "eval_end": "2026-09-29 12:00:00",
+      "n_origins": 972,
+      "n_classical_origins": 139,
+      "weather_regimes_in_eval": {
+        "dayahead": 46704
+      },
+      "leaderboard_daily": [
+        {
+          "model": "LightGBM",
+          "origins": 972,
+          "MASE": 0.48175696106779203,
+          "MAE": 234.42674183176516,
+          "RMSE": 329.1410427313126,
+          "sMAPE": 5.057047709488003,
+          "pinball80": 55.43070174026576,
+          "coverage80": 0.7980233368164402,
+          "width80": 790.0940789442285,
+          "pinball95": 20.370770126836824,
+          "coverage95": 0.9472309299895507,
+          "width95": 1328.7982263554306
+        },
+        {
+          "model": "Seasonal-naive (week)",
+          "origins": 972,
+          "MASE": 1.1594464856874216,
+          "MAE": 582.8834435370942,
+          "RMSE": 871.9981422223962,
+          "sMAPE": 12.398762459597625,
+          "pinball80": 146.00565761711937,
+          "coverage80": 0.7962164750957854,
+          "width80": 2029.6713904809412,
+          "pinball95": 54.87855117718554,
+          "coverage95": 0.9470567746429815,
+          "width95": 3516.259013784126
+        },
+        {
+          "model": "Seasonal-naive (day)",
+          "origins": 972,
+          "MASE": 1.187818174535864,
+          "MAE": 589.9470869413009,
+          "RMSE": 877.7795527502609,
+          "sMAPE": 12.508132823352883,
+          "pinball80": NaN,
+          "coverage80": NaN,
+          "width80": NaN,
+          "pinball95": NaN,
+          "coverage95": NaN,
+          "width95": NaN
+        },
+        {
+          "model": "Naive",
+          "origins": 972,
+          "MASE": 2.5239115503213485,
+          "MAE": 1232.7827272662323,
+          "RMSE": 1531.5258172681,
+          "sMAPE": 28.513185148704682,
+          "pinball80": NaN,
+          "coverage80": NaN,
+          "width80": NaN,
+          "pinball95": NaN,
+          "coverage95": NaN,
+          "width95": NaN
+        }
+      ],
+      "leaderboard_weekly": [
+        {
+          "model": "LightGBM",
+          "origins": 139,
+          "MASE": 0.47895442204633365,
+          "MAE": 232.16822065177428,
+          "RMSE": 320.9730535149572,
+          "sMAPE": 4.8845190669120155
+        },
+        {
+          "model": "Seasonal-naive (day)",
+          "origins": 139,
+          "MASE": 0.9260296137000387,
+          "MAE": 464.49144284572344,
+          "RMSE": 714.9272096714466,
+          "sMAPE": 9.636224248388391
+        },
+        {
+          "model": "Seasonal-naive (week)",
+          "origins": 139,
+          "MASE": 1.1503728497552057,
+          "MAE": 578.1411001199041,
+          "RMSE": 862.2414431517149,
+          "sMAPE": 11.951935652887801
+        },
+        {
+          "model": "MSTL-ARIMAX",
+          "origins": 139,
+          "MASE": 1.2849830713847883,
+          "MAE": 645.1643269444271,
+          "RMSE": 861.8147105853647,
+          "sMAPE": 13.526385126380639
+        },
+        {
+          "model": "MSTL-ARIMA",
+          "origins": 139,
+          "MASE": 1.3637777045485187,
+          "MAE": 683.5324569482566,
+          "RMSE": 908.9669750444739,
+          "sMAPE": 14.321256787484305
+        },
+        {
+          "model": "MSTL-ETS",
+          "origins": 139,
+          "MASE": 1.4687929059203009,
+          "MAE": 734.5909694476945,
+          "RMSE": 952.0906543422955,
+          "sMAPE": 15.343899071586408
+        },
+        {
+          "model": "Naive",
+          "origins": 139,
+          "MASE": 2.309710041665524,
+          "MAE": 1142.580192096323,
+          "RMSE": 1404.3707727856888,
+          "sMAPE": 25.685413595586603
+        },
+        {
+          "model": "AutoETS",
+          "origins": 139,
+          "MASE": 2.542369453601543,
+          "MAE": 1282.9788935011493,
+          "RMSE": 1574.813589312006,
+          "sMAPE": 30.524324903285443
+        }
+      ],
+      "mae_by_hour": [
+        {
+          "hour": 0,
+          "LightGBM": 147.66,
+          "Naive": 984.04,
+          "Seasonal-naive (day)": 210.31,
+          "Seasonal-naive (week)": 294.76
+        },
+        {
+          "hour": 1,
+          "LightGBM": 133.46,
+          "Naive": 891.29,
+          "Seasonal-naive (day)": 200.27,
+          "Seasonal-naive (week)": 281.94
+        },
+        {
+          "hour": 2,
+          "LightGBM": 127.87,
+          "Naive": 856.59,
+          "Seasonal-naive (day)": 198.97,
+          "Seasonal-naive (week)": 274.44
+        },
+        {
+          "hour": 3,
+          "LightGBM": 126.05,
+          "Naive": 863.18,
+          "Seasonal-naive (day)": 198.97,
+          "Seasonal-naive (week)": 272.81
+        },
+        {
+          "hour": 4,
+          "LightGBM": 130.64,
+          "Naive": 899.64,
+          "Seasonal-naive (day)": 221.36,
+          "Seasonal-naive (week)": 280.29
+        },
+        {
+          "hour": 5,
+          "LightGBM": 153.07,
+          "Naive": 1007.21,
+          "Seasonal-naive (day)": 310.48,
+          "Seasonal-naive (week)": 320.1
+        },
+        {
+          "hour": 6,
+          "LightGBM": 181.61,
+          "Naive": 1259.05,
+          "Seasonal-naive (day)": 466.43,
+          "Seasonal-naive (week)": 396.69
+        },
+        {
+          "hour": 7,
+          "LightGBM": 212.2,
+          "Naive": 1408.17,
+          "Seasonal-naive (day)": 587.8,
+          "Seasonal-naive (week)": 485.93
+        },
+        {
+          "hour": 8,
+          "LightGBM": 244.21,
+          "Naive": 1265.14,
+          "Seasonal-naive (day)": 627.27,
+          "Seasonal-naive (week)": 592.32
+        },
+        {
+          "hour": 9,
+          "LightGBM": 292.51,
+          "Naive": 980.34,
+          "Seasonal-naive (day)": 668.65,
+          "Seasonal-naive (week)": 703.96
+        },
+        {
+          "hour": 10,
+          "LightGBM": 336.64,
+          "Naive": 820.63,
+          "Seasonal-naive (day)": 745.29,
+          "Seasonal-naive (week)": 800.41
+        },
+        {
+          "hour": 11,
+          "LightGBM": 375.44,
+          "Naive": 829.44,
+          "Seasonal-naive (day)": 826.68,
+          "Seasonal-naive (week)": 919.37
+        },
+        {
+          "hour": 12,
+          "LightGBM": 400.68,
+          "Naive": 902.62,
+          "Seasonal-naive (day)": 1083.73,
+          "Seasonal-naive (week)": 1012.45
+        },
+        {
+          "hour": 13,
+          "LightGBM": 411.08,
+          "Naive": 951.87,
+          "Seasonal-naive (day)": 1108.86,
+          "Seasonal-naive (week)": 1055.75
+        },
+        {
+          "hour": 14,
+          "LightGBM": 383.34,
+          "Naive": 982.28,
+          "Seasonal-naive (day)": 1072.62,
+          "Seasonal-naive (week)": 1032.95
+        },
+        {
+          "hour": 15,
+          "LightGBM": 346.4,
+          "Naive": 1088.43,
+          "Seasonal-naive (day)": 994.03,
+          "Seasonal-naive (week)": 946.54
+        },
+        {
+          "hour": 16,
+          "LightGBM": 297.31,
+          "Naive": 1475.39,
+          "Seasonal-naive (day)": 878.77,
+          "Seasonal-naive (week)": 806.5
+        },
+        {
+          "hour": 17,
+          "LightGBM": 253.14,
+          "Naive": 2012.06,
+          "Seasonal-naive (day)": 767.89,
+          "Seasonal-naive (week)": 696.83
+        },
+        {
+          "hour": 18,
+          "LightGBM": 237.65,
+          "Naive": 2246.83,
+          "Seasonal-naive (day)": 697.6,
+          "Seasonal-naive (week)": 627.73
+        },
+        {
+          "hour": 19,
+          "LightGBM": 202.91,
+          "Naive": 2119.07,
+          "Seasonal-naive (day)": 629.25,
+          "Seasonal-naive (week)": 561.01
+        },
+        {
+          "hour": 20,
+          "LightGBM": 183.24,
+          "Naive": 1851.81,
+          "Seasonal-naive (day)": 545.47,
+          "Seasonal-naive (week)": 498.79
+        },
+        {
+          "hour": 21,
+          "LightGBM": 165.07,
+          "Naive": 1516.76,
+          "Seasonal-naive (day)": 445.79,
+          "Seasonal-naive (week)": 436.49
+        },
+        {
+          "hour": 22,
+          "LightGBM": 148.55,
+          "Naive": 1210.8,
+          "Seasonal-naive (day)": 363.46,
+          "Seasonal-naive (week)": 372.23
+        },
+        {
+          "hour": 23,
+          "LightGBM": 135.52,
+          "Naive": 1164.15,
+          "Seasonal-naive (day)": 308.75,
+          "Seasonal-naive (week)": 318.9
+        }
+      ],
+      "feature_importance": {
+        "seasonal_rolling_mean_lag96_season_length48_window_size7": 0.484,
+        "temp_lag_3h": 0.0719,
+        "solar_radiation": 0.0624,
+        "is_non_working_day": 0.0537,
+        "lag672": 0.0493,
+        "temp_max_24h": 0.0371,
+        "lag336": 0.0357,
+        "temperature": 0.0259,
+        "trend_years": 0.0205,
+        "half_hour": 0.0184,
+        "cdd": 0.0158,
+        "lag96": 0.0135,
+        "doy_cos": 0.0127,
+        "temp_x_hour": 0.0121,
+        "humidity": 0.012,
+        "day_of_week": 0.0082,
+        "doy_sin": 0.008,
+        "is_weekend": 0.0079,
+        "wind_speed": 0.0071,
+        "rolling_mean_lag72_window_size336": 0.0063
+      },
+      "headline": {
+        "model": "LightGBM",
+        "MASE": 0.48175696106779203,
+        "MAE": 234.42674183176516
+      },
+      "aci_alphas": {
+        "80": 0.1608333333333333,
+        "95": -0.004999999999999151
+      },
+      "gate": {
+        "threshold": 0.6,
+        "passed": true
+      }
+    },
+    "price": {
+      "target": "price",
+      "unit": "$/MWh",
+      "eval_start": "2024-02-01 12:00:00",
+      "eval_end": "2026-09-29 12:00:00",
+      "n_origins": 972,
+      "n_classical_origins": 139,
+      "weather_regimes_in_eval": {
+        "dayahead": 46704
+      },
+      "leaderboard_daily": [
+        {
+          "model": "LightGBM",
+          "origins": 972,
+          "MASE": 0.8158168364578776,
+          "MAE": 43.56193011581275,
+          "RMSE": 288.43795427672137,
+          "pinball80": 12.428270943971446,
+          "coverage80": 0.7981974921630094,
+          "width80": 125.70555218243592,
+          "pinball95": 9.189702533245084,
+          "coverage95": 0.9482105538140021,
+          "width95": 482.08789963080676
+        },
+        {
+          "model": "Seasonal-naive (day)",
+          "origins": 972,
+          "MASE": 1.2310323342427383,
+          "MAE": 69.06759298553956,
+          "RMSE": 409.7244251775795,
+          "pinball80": NaN,
+          "coverage80": NaN,
+          "width80": NaN,
+          "pinball95": NaN,
+          "coverage95": NaN,
+          "width95": NaN
+        },
+        {
+          "model": "Seasonal-naive (week)",
+          "origins": 972,
+          "MASE": 1.3840912108451666,
+          "MAE": 79.06168617112483,
+          "RMSE": 409.3565903434291,
+          "pinball80": 24.154876217843682,
+          "coverage80": 0.8011581330546848,
+          "width80": 256.80200894439747,
+          "pinball95": 18.254167323855825,
+          "coverage95": 0.9479057819575061,
+          "width95": 940.0516251161554
+        },
+        {
+          "model": "Naive",
+          "origins": 972,
+          "MASE": 1.5532080577375045,
+          "MAE": 80.68489004629629,
+          "RMSE": 303.6849175664146,
+          "pinball80": NaN,
+          "coverage80": NaN,
+          "width80": NaN,
+          "pinball95": NaN,
+          "coverage95": NaN,
+          "width95": NaN
+        }
+      ],
+      "leaderboard_weekly": [
+        {
+          "model": "LightGBM",
+          "origins": 139,
+          "MASE": 0.6767821515565509,
+          "MAE": 35.796214596017904,
+          "RMSE": 55.159352330087515
+        },
+        {
+          "model": "MSTL-ARIMA",
+          "origins": 139,
+          "MASE": 1.008127300816677,
+          "MAE": 57.01225750484599,
+          "RMSE": 114.62185917556057
+        },
+        {
+          "model": "MSTL-ETS",
+          "origins": 139,
+          "MASE": 1.0169512184377512,
+          "MAE": 57.1740879718254,
+          "RMSE": 114.78355812955203
+        },
+        {
+          "model": "MSTL-ARIMAX",
+          "origins": 139,
+          "MASE": 1.0370816196517945,
+          "MAE": 59.75061377118968,
+          "RMSE": 115.93001802565269
+        },
+        {
+          "model": "Seasonal-naive (day)",
+          "origins": 139,
+          "MASE": 1.0883716984950036,
+          "MAE": 57.534967026378894,
+          "RMSE": 166.81581540198883
+        },
+        {
+          "model": "Seasonal-naive (week)",
+          "origins": 139,
+          "MASE": 1.197795529996891,
+          "MAE": 64.12338254396484,
+          "RMSE": 94.59450938690713
+        },
+        {
+          "model": "Naive",
+          "origins": 139,
+          "MASE": 1.364074164247777,
+          "MAE": 70.7718065547562,
+          "RMSE": 95.87273588935302
+        },
+        {
+          "model": "AutoETS",
+          "origins": 139,
+          "MASE": 1.366230792274227,
+          "MAE": 70.75586734511427,
+          "RMSE": 95.75187693419711
+        }
+      ],
+      "mae_by_hour": [
+        {
+          "hour": 0,
+          "LightGBM": 33.57,
+          "Naive": 74.54,
+          "Seasonal-naive (day)": 43.52,
+          "Seasonal-naive (week)": 60.62
+        },
+        {
+          "hour": 1,
+          "LightGBM": 32.97,
+          "Naive": 69.91,
+          "Seasonal-naive (day)": 43.29,
+          "Seasonal-naive (week)": 59.74
+        },
+        {
+          "hour": 2,
+          "LightGBM": 32.93,
+          "Naive": 66.68,
+          "Seasonal-naive (day)": 43.74,
+          "Seasonal-naive (week)": 59.63
+        },
+        {
+          "hour": 3,
+          "LightGBM": 33.32,
+          "Naive": 66.31,
+          "Seasonal-naive (day)": 43.91,
+          "Seasonal-naive (week)": 59.7
+        },
+        {
+          "hour": 4,
+          "LightGBM": 35.07,
+          "Naive": 69.5,
+          "Seasonal-naive (day)": 45.59,
+          "Seasonal-naive (week)": 61.97
+        },
+        {
+          "hour": 5,
+          "LightGBM": 36.99,
+          "Naive": 77.36,
+          "Seasonal-naive (day)": 48.31,
+          "Seasonal-naive (week)": 65.33
+        },
+        {
+          "hour": 6,
+          "LightGBM": 39.01,
+          "Naive": 82.49,
+          "Seasonal-naive (day)": 53.09,
+          "Seasonal-naive (week)": 68.19
+        },
+        {
+          "hour": 7,
+          "LightGBM": 47.89,
+          "Naive": 81.41,
+          "Seasonal-naive (day)": 70.62,
+          "Seasonal-naive (week)": 83.91
+        },
+        {
+          "hour": 8,
+          "LightGBM": 49.45,
+          "Naive": 67.93,
+          "Seasonal-naive (day)": 74.7,
+          "Seasonal-naive (week)": 88.09
+        },
+        {
+          "hour": 9,
+          "LightGBM": 34.65,
+          "Naive": 47.85,
+          "Seasonal-naive (day)": 48.77,
+          "Seasonal-naive (week)": 61.57
+        },
+        {
+          "hour": 10,
+          "LightGBM": 30.07,
+          "Naive": 41.44,
+          "Seasonal-naive (day)": 41.16,
+          "Seasonal-naive (week)": 53.8
+        },
+        {
+          "hour": 11,
+          "LightGBM": 30.06,
+          "Naive": 41.22,
+          "Seasonal-naive (day)": 41.36,
+          "Seasonal-naive (week)": 54.89
+        },
+        {
+          "hour": 12,
+          "LightGBM": 30.57,
+          "Naive": 43.22,
+          "Seasonal-naive (day)": 52.55,
+          "Seasonal-naive (week)": 56.72
+        },
+        {
+          "hour": 13,
+          "LightGBM": 46.56,
+          "Naive": 59.21,
+          "Seasonal-naive (day)": 82.94,
+          "Seasonal-naive (week)": 87.52
+        },
+        {
+          "hour": 14,
+          "LightGBM": 51.64,
+          "Naive": 67.09,
+          "Seasonal-naive (day)": 93.24,
+          "Seasonal-naive (week)": 97.22
+        },
+        {
+          "hour": 15,
+          "LightGBM": 41.51,
+          "Naive": 61.18,
+          "Seasonal-naive (day)": 71.02,
+          "Seasonal-naive (week)": 75.48
+        },
+        {
+          "hour": 16,
+          "LightGBM": 44.1,
+          "Naive": 83.59,
+          "Seasonal-naive (day)": 75.26,
+          "Seasonal-naive (week)": 78.68
+        },
+        {
+          "hour": 17,
+          "LightGBM": 86.81,
+          "Naive": 154.28,
+          "Seasonal-naive (day)": 159.84,
+          "Seasonal-naive (week)": 161.94
+        },
+        {
+          "hour": 18,
+          "LightGBM": 77.98,
+          "Naive": 154.44,
+          "Seasonal-naive (day)": 137.02,
+          "Seasonal-naive (week)": 141.83
+        },
+        {
+          "hour": 19,
+          "LightGBM": 72.57,
+          "Naive": 143.8,
+          "Seasonal-naive (day)": 129.52,
+          "Seasonal-naive (week)": 135.31
+        },
+        {
+          "hour": 20,
+          "LightGBM": 53.17,
+          "Naive": 119.01,
+          "Seasonal-naive (day)": 92.13,
+          "Seasonal-naive (week)": 97.56
+        },
+        {
+          "hour": 21,
+          "LightGBM": 35.74,
+          "Naive": 94.17,
+          "Seasonal-naive (day)": 57.68,
+          "Seasonal-naive (week)": 65.04
+        },
+        {
+          "hour": 22,
+          "LightGBM": 34.19,
+          "Naive": 85.21,
+          "Seasonal-naive (day)": 54.12,
+          "Seasonal-naive (week)": 61.79
+        },
+        {
+          "hour": 23,
+          "LightGBM": 34.69,
+          "Naive": 84.6,
+          "Seasonal-naive (day)": 54.24,
+          "Seasonal-naive (week)": 60.98
+        }
+      ],
+      "feature_importance": {
+        "seasonal_rolling_mean_lag96_season_length48_window_size7": 0.2443,
+        "trend_years": 0.0936,
+        "wind_speed": 0.0814,
+        "temp_max_24h": 0.0479,
+        "doy_cos": 0.0438,
+        "doy_sin": 0.0407,
+        "rolling_mean_lag72_window_size336": 0.0392,
+        "lag672": 0.0335,
+        "lag96": 0.0332,
+        "solar_radiation": 0.029,
+        "rolling_max_lag72_window_size48": 0.0273,
+        "temp_lag_3h": 0.0268,
+        "rolling_mean_lag72_window_size48": 0.0258,
+        "half_hour": 0.0254,
+        "humidity": 0.0247,
+        "rolling_std_lag72_window_size48": 0.0237,
+        "temp_lag_24h": 0.0169,
+        "day_of_week": 0.0163,
+        "lag336": 0.0152,
+        "cloud_cover": 0.0152
+      },
+      "headline": {
+        "model": "LightGBM",
+        "MASE": 0.8158168364578776,
+        "MAE": 43.56193011581275
+      },
+      "aci_alphas": {
+        "80": 0.16999999999999996,
+        "95": 0.022916666666667532
+      }
+    }
+  }
+}
