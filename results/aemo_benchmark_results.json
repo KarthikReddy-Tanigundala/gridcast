@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-20T10:42:10+00:00",
+  "generated_at": "2026-10-22T01:21:22+00:00",
   "demand": {
     "target": "demand",
     "unit": "MW",
@@ -11,11 +11,11 @@
     "table": [
       {
         "model": "GridCast (LightGBM)",
-        "MASE": 0.49620245446272054,
-        "MAE": 245.09602668957834,
-        "MedAE": 169.579833984375,
-        "RMSE": 350.9933319410159,
-        "bias": -28.659683227539062
+        "MASE": 0.4953440003676694,
+        "MAE": 244.9467541202084,
+        "MedAE": 169.0556640625,
+        "RMSE": 350.4744362506703,
+        "bias": -22.749935150146484
       },
       {
         "model": "AEMO PREDISPATCH",
@@ -27,11 +27,11 @@
       },
       {
         "model": "Blend (mean of both)",
-        "MASE": 0.3907751120557099,
-        "MAE": 191.69690106989262,
-        "MedAE": 130.551025390625,
-        "RMSE": 274.91731621218054,
-        "bias": -47.472408294677734
+        "MASE": 0.38990209561732636,
+        "MAE": 191.32478582640707,
+        "MedAE": 131.089599609375,
+        "RMSE": 274.36608194221304,
+        "bias": -44.51753616333008
       },
       {
         "model": "Seasonal-naive (week)",
@@ -42,212 +42,212 @@
         "bias": -4.699283123016357
       }
     ],
-    "gridcast_win_rate": 0.36813186813186816,
+    "gridcast_win_rate": 0.37362637362637363,
     "mae_by_hour": [
       {
         "hour": 0,
-        "gridcast": 140.94,
+        "gridcast": 139.46,
         "aemo": 94.87,
-        "blend": 103.85
+        "blend": 102.25
       },
       {
         "hour": 1,
-        "gridcast": 129.74,
+        "gridcast": 127.97,
         "aemo": 98.41,
-        "blend": 98.82
+        "blend": 97.66
       },
       {
         "hour": 2,
-        "gridcast": 128.55,
+        "gridcast": 127.79,
         "aemo": 96.68,
-        "blend": 97.27
+        "blend": 96.65
       },
       {
         "hour": 3,
-        "gridcast": 126.24,
+        "gridcast": 126.09,
         "aemo": 93.77,
-        "blend": 94.15
+        "blend": 93.33
       },
       {
         "hour": 4,
-        "gridcast": 131.35,
+        "gridcast": 131.06,
         "aemo": 102.09,
-        "blend": 99.69
+        "blend": 99.65
       },
       {
         "hour": 5,
-        "gridcast": 157.38,
+        "gridcast": 157.33,
         "aemo": 115.66,
-        "blend": 114.95
+        "blend": 115.02
       },
       {
         "hour": 6,
-        "gridcast": 183.62,
+        "gridcast": 181.84,
         "aemo": 146.5,
-        "blend": 139.47
+        "blend": 139.11
       },
       {
         "hour": 7,
-        "gridcast": 218.35,
+        "gridcast": 219.71,
         "aemo": 186.84,
-        "blend": 176.09
+        "blend": 175.75
       },
       {
         "hour": 8,
-        "gridcast": 256.56,
+        "gridcast": 260.91,
         "aemo": 210.16,
-        "blend": 201.77
+        "blend": 202.7
       },
       {
         "hour": 9,
-        "gridcast": 309.55,
+        "gridcast": 312.63,
         "aemo": 261.11,
-        "blend": 245.9
+        "blend": 248.09
       },
       {
         "hour": 10,
-        "gridcast": 360.92,
+        "gridcast": 364.87,
         "aemo": 338.08,
-        "blend": 293.66
+        "blend": 296.0
       },
       {
         "hour": 11,
-        "gridcast": 405.82,
+        "gridcast": 404.67,
         "aemo": 378.68,
-        "blend": 326.33
+        "blend": 325.64
       },
       {
         "hour": 12,
-        "gridcast": 432.33,
+        "gridcast": 428.41,
         "aemo": 374.07,
-        "blend": 340.07
+        "blend": 337.5
       },
       {
         "hour": 13,
-        "gridcast": 454.13,
+        "gridcast": 447.1,
         "aemo": 364.87,
-        "blend": 353.16
+        "blend": 350.34
       },
       {
         "hour": 14,
-        "gridcast": 428.96,
+        "gridcast": 428.58,
         "aemo": 357.16,
-        "blend": 339.08
+        "blend": 339.9
       },
       {
         "hour": 15,
-        "gridcast": 374.06,
+        "gridcast": 376.61,
         "aemo": 326.47,
-        "blend": 300.73
+        "blend": 301.85
       },
       {
         "hour": 16,
-        "gridcast": 323.15,
+        "gridcast": 323.69,
         "aemo": 263.29,
-        "blend": 252.05
+        "blend": 252.09
       },
       {
         "hour": 17,
-        "gridcast": 263.51,
+        "gridcast": 261.51,
         "aemo": 210.31,
-        "blend": 201.71
+        "blend": 199.99
       },
       {
         "hour": 18,
-        "gridcast": 234.8,
+        "gridcast": 230.94,
         "aemo": 181.44,
-        "blend": 177.24
+        "blend": 174.97
       },
       {
         "hour": 19,
-        "gridcast": 200.48,
+        "gridcast": 198.7,
         "aemo": 159.4,
-        "blend": 152.8
+        "blend": 150.79
       },
       {
         "hour": 20,
-        "gridcast": 177.92,
+        "gridcast": 181.51,
         "aemo": 151.21,
-        "blend": 142.16
+        "blend": 141.95
       },
       {
         "hour": 21,
-        "gridcast": 166.7,
+        "gridcast": 166.45,
         "aemo": 136.79,
-        "blend": 131.99
+        "blend": 131.61
       },
       {
         "hour": 22,
-        "gridcast": 145.1,
+        "gridcast": 146.57,
         "aemo": 117.21,
-        "blend": 113.35
+        "blend": 113.76
       },
       {
         "hour": 23,
-        "gridcast": 132.15,
+        "gridcast": 134.33,
         "aemo": 114.37,
-        "blend": 104.43
+        "blend": 105.19
       }
     ],
     "mae_by_month": [
       {
         "month": "2025-10",
-        "gridcast": 246.27,
+        "gridcast": 243.36,
         "aemo": 215.63
       },
       {
         "month": "2025-11",
-        "gridcast": 217.59,
+        "gridcast": 210.23,
         "aemo": 233.58
       },
       {
         "month": "2025-12",
-        "gridcast": 280.32,
+        "gridcast": 287.82,
         "aemo": 213.34
       },
       {
         "month": "2026-01",
-        "gridcast": 322.74,
+        "gridcast": 321.65,
         "aemo": 215.08
       },
       {
         "month": "2026-02",
-        "gridcast": 304.1,
+        "gridcast": 304.81,
         "aemo": 231.39
       },
       {
         "month": "2026-03",
-        "gridcast": 191.32,
+        "gridcast": 194.18,
         "aemo": 199.91
       },
       {
         "month": "2026-04",
-        "gridcast": 185.57,
+        "gridcast": 183.27,
         "aemo": 159.55
       },
       {
         "month": "2026-05",
-        "gridcast": 202.6,
+        "gridcast": 197.23,
         "aemo": 170.18
       },
       {
         "month": "2026-06",
-        "gridcast": 204.87,
+        "gridcast": 203.22,
         "aemo": 176.44
       },
       {
         "month": "2026-07",
-        "gridcast": 297.1,
+        "gridcast": 291.1,
         "aemo": 230.43
       },
       {
         "month": "2026-08",
-        "gridcast": 256.31,
+        "gridcast": 268.49,
         "aemo": 181.38
       },
       {
         "month": "2026-09",
-        "gridcast": 233.21,
+        "gridcast": 234.66,
         "aemo": 214.97
       }
     ]
@@ -266,11 +266,11 @@
     "table": [
       {
         "model": "GridCast (LightGBM)",
-        "MASE": 0.7322346733550524,
-        "MAE": 29.563166750339914,
-        "MedAE": 21.974990844726562,
-        "RMSE": 61.539780404869155,
-        "bias": -1.031638503074646
+        "MASE": 0.7308554675501185,
+        "MAE": 29.4967848731504,
+        "MedAE": 21.917728424072266,
+        "RMSE": 61.39912240860218,
+        "bias": -0.8386766314506531
       },
       {
         "model": "AEMO PREDISPATCH",
@@ -282,11 +282,11 @@
       },
       {
         "model": "Blend (mean of both)",
-        "MASE": 1.194817218293193,
-        "MAE": 50.60202065345316,
-        "MedAE": 17.072341918945312,
-        "RMSE": 434.9374244938402,
-        "bias": 26.404430389404297
+        "MASE": 1.1933935761047545,
+        "MAE": 50.52993367430253,
+        "MedAE": 16.91071319580078,
+        "RMSE": 435.01535581429465,
+        "bias": 26.50090980529785
       },
       {
         "model": "Seasonal-naive (week)",
@@ -297,212 +297,212 @@
         "bias": -0.11008646339178085
       }
     ],
-    "gridcast_win_rate": 0.5631868131868132,
+    "gridcast_win_rate": 0.5741758241758241,
     "mae_by_hour": [
       {
         "hour": 0,
-        "gridcast": 29.2,
+        "gridcast": 28.99,
         "aemo": 16.87,
-        "blend": 19.3
+        "blend": 19.15
       },
       {
         "hour": 1,
-        "gridcast": 27.79,
+        "gridcast": 27.53,
         "aemo": 14.22,
-        "blend": 17.47
+        "blend": 17.36
       },
       {
         "hour": 2,
-        "gridcast": 26.94,
+        "gridcast": 26.44,
         "aemo": 14.24,
-        "blend": 17.27
+        "blend": 17.15
       },
       {
         "hour": 3,
-        "gridcast": 27.02,
+        "gridcast": 26.73,
         "aemo": 14.0,
-        "blend": 17.71
+        "blend": 17.61
       },
       {
         "hour": 4,
-        "gridcast": 28.94,
+        "gridcast": 28.78,
         "aemo": 17.81,
-        "blend": 19.04
+        "blend": 18.9
       },
       {
         "hour": 5,
-        "gridcast": 30.65,
+        "gridcast": 30.63,
         "aemo": 33.15,
-        "blend": 25.74
+        "blend": 25.65
       },
       {
         "hour": 6,
-        "gridcast": 31.16,
+        "gridcast": 31.08,
         "aemo": 69.71,
-        "blend": 43.62
+        "blend": 43.33
       },
       {
         "hour": 7,
-        "gridcast": 29.23,
+        "gridcast": 29.19,
         "aemo": 157.23,
-        "blend": 85.07
+        "blend": 84.87
       },
       {
         "hour": 8,
-        "gridcast": 28.19,
+        "gridcast": 27.95,
         "aemo": 168.5,
-        "blend": 91.24
+        "blend": 91.03
       },
       {
         "hour": 9,
-        "gridcast": 24.55,
+        "gridcast": 24.56,
         "aemo": 34.53,
-        "blend": 22.74
+        "blend": 22.75
       },
       {
         "hour": 10,
-        "gridcast": 23.3,
+        "gridcast": 23.24,
         "aemo": 29.91,
-        "blend": 19.8
+        "blend": 19.7
       },
       {
         "hour": 11,
-        "gridcast": 23.35,
+        "gridcast": 23.09,
         "aemo": 33.12,
-        "blend": 22.25
+        "blend": 22.04
       },
       {
         "hour": 12,
-        "gridcast": 24.82,
+        "gridcast": 24.6,
         "aemo": 40.28,
-        "blend": 26.22
+        "blend": 26.07
       },
       {
         "hour": 13,
-        "gridcast": 26.06,
+        "gridcast": 25.72,
         "aemo": 45.51,
-        "blend": 28.92
+        "blend": 28.77
       },
       {
         "hour": 14,
-        "gridcast": 27.25,
+        "gridcast": 26.77,
         "aemo": 41.43,
-        "blend": 27.81
+        "blend": 27.52
       },
       {
         "hour": 15,
-        "gridcast": 30.85,
+        "gridcast": 30.59,
         "aemo": 37.89,
-        "blend": 27.83
+        "blend": 27.63
       },
       {
         "hour": 16,
-        "gridcast": 32.49,
+        "gridcast": 32.63,
         "aemo": 41.55,
-        "blend": 28.48
+        "blend": 28.64
       },
       {
         "hour": 17,
-        "gridcast": 37.38,
+        "gridcast": 37.98,
         "aemo": 184.76,
-        "blend": 100.46
+        "blend": 100.83
       },
       {
         "hour": 18,
-        "gridcast": 35.09,
+        "gridcast": 35.08,
         "aemo": 305.91,
-        "blend": 158.26
+        "blend": 158.38
       },
       {
         "hour": 19,
-        "gridcast": 42.41,
+        "gridcast": 42.74,
         "aemo": 337.23,
-        "blend": 178.43
+        "blend": 178.57
       },
       {
         "hour": 20,
-        "gridcast": 33.15,
+        "gridcast": 33.57,
         "aemo": 199.04,
-        "blend": 105.35
+        "blend": 105.56
       },
       {
         "hour": 21,
-        "gridcast": 30.89,
+        "gridcast": 31.01,
         "aemo": 137.75,
-        "blend": 74.33
+        "blend": 74.39
       },
       {
         "hour": 22,
-        "gridcast": 29.12,
+        "gridcast": 29.22,
         "aemo": 48.75,
-        "blend": 31.05
+        "blend": 30.85
       },
       {
         "hour": 23,
-        "gridcast": 29.7,
+        "gridcast": 29.78,
         "aemo": 33.92,
-        "blend": 26.05
+        "blend": 25.99
       }
     ],
     "mae_by_month": [
       {
         "month": "2025-10",
-        "gridcast": 36.92,
+        "gridcast": 36.22,
         "aemo": 138.02
       },
       {
         "month": "2025-11",
-        "gridcast": 32.34,
+        "gridcast": 32.45,
         "aemo": 37.71
       },
       {
         "month": "2025-12",
-        "gridcast": 28.72,
+        "gridcast": 29.07,
         "aemo": 81.73
       },
       {
         "month": "2026-01",
-        "gridcast": 30.35,
+        "gridcast": 30.01,
         "aemo": 33.48
       },
       {
         "month": "2026-02",
-        "gridcast": 27.37,
+        "gridcast": 27.89,
         "aemo": 31.49
       },
       {
         "month": "2026-03",
-        "gridcast": 25.01,
+        "gridcast": 25.04,
         "aemo": 23.25
       },
       {
         "month": "2026-04",
-        "gridcast": 29.54,
+        "gridcast": 29.33,
         "aemo": 23.38
       },
       {
         "month": "2026-05",
-        "gridcast": 31.69,
+        "gridcast": 31.1,
         "aemo": 37.68
       },
       {
         "month": "2026-06",
-        "gridcast": 34.64,
+        "gridcast": 34.84,
         "aemo": 122.23
       },
       {
         "month": "2026-07",
-        "gridcast": 30.87,
+        "gridcast": 30.66,
         "aemo": 306.42
       },
       {
         "month": "2026-08",
-        "gridcast": 23.84,
+        "gridcast": 23.77,
         "aemo": 110.86
       },
       {
         "month": "2026-09",
-        "gridcast": 23.08,
+        "gridcast": 23.28,
         "aemo": 74.01
       }
     ]

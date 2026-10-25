@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-20T10:39:57+00:00",
+  "generated_at": "2026-10-22T01:21:20+00:00",
   "config": {
     "backtest": {
       "eval_start": "2024-02-01",
@@ -57,16 +57,16 @@
         {
           "model": "LightGBM",
           "origins": 972,
-          "MASE": 0.48175696106779203,
-          "MAE": 234.42674183176516,
-          "RMSE": 329.1410427313126,
-          "sMAPE": 5.057047709488003,
-          "pinball80": 55.43070174026576,
-          "coverage80": 0.7980233368164402,
-          "width80": 790.0940789442285,
-          "pinball95": 20.370770126836824,
-          "coverage95": 0.9472309299895507,
-          "width95": 1328.7982263554306
+          "MASE": 0.4823239336433712,
+          "MAE": 234.81700823523454,
+          "RMSE": 329.1055634056015,
+          "sMAPE": 5.069541725210428,
+          "pinball80": 55.57944592661867,
+          "coverage80": 0.7977403343782654,
+          "width80": 794.2956471749436,
+          "pinball95": 20.32577953263399,
+          "coverage95": 0.9471656217345873,
+          "width95": 1320.3953613368576
         },
         {
           "model": "Seasonal-naive (week)",
@@ -115,10 +115,10 @@
         {
           "model": "LightGBM",
           "origins": 139,
-          "MASE": 0.47895442204633365,
-          "MAE": 232.16822065177428,
-          "RMSE": 320.9730535149572,
-          "sMAPE": 4.8845190669120155
+          "MASE": 0.478744083126395,
+          "MAE": 232.03355882590236,
+          "RMSE": 321.0412158683428,
+          "sMAPE": 4.888200554616443
         },
         {
           "model": "Seasonal-naive (day)",
@@ -180,168 +180,168 @@
       "mae_by_hour": [
         {
           "hour": 0,
-          "LightGBM": 147.66,
+          "LightGBM": 147.31,
           "Naive": 984.04,
           "Seasonal-naive (day)": 210.31,
           "Seasonal-naive (week)": 294.76
         },
         {
           "hour": 1,
-          "LightGBM": 133.46,
+          "LightGBM": 134.61,
           "Naive": 891.29,
           "Seasonal-naive (day)": 200.27,
           "Seasonal-naive (week)": 281.94
         },
         {
           "hour": 2,
-          "LightGBM": 127.87,
+          "LightGBM": 128.49,
           "Naive": 856.59,
           "Seasonal-naive (day)": 198.97,
           "Seasonal-naive (week)": 274.44
         },
         {
           "hour": 3,
-          "LightGBM": 126.05,
+          "LightGBM": 126.5,
           "Naive": 863.18,
           "Seasonal-naive (day)": 198.97,
           "Seasonal-naive (week)": 272.81
         },
         {
           "hour": 4,
-          "LightGBM": 130.64,
+          "LightGBM": 131.8,
           "Naive": 899.64,
           "Seasonal-naive (day)": 221.36,
           "Seasonal-naive (week)": 280.29
         },
         {
           "hour": 5,
-          "LightGBM": 153.07,
+          "LightGBM": 153.16,
           "Naive": 1007.21,
           "Seasonal-naive (day)": 310.48,
           "Seasonal-naive (week)": 320.1
         },
         {
           "hour": 6,
-          "LightGBM": 181.61,
+          "LightGBM": 180.23,
           "Naive": 1259.05,
           "Seasonal-naive (day)": 466.43,
           "Seasonal-naive (week)": 396.69
         },
         {
           "hour": 7,
-          "LightGBM": 212.2,
+          "LightGBM": 211.97,
           "Naive": 1408.17,
           "Seasonal-naive (day)": 587.8,
           "Seasonal-naive (week)": 485.93
         },
         {
           "hour": 8,
-          "LightGBM": 244.21,
+          "LightGBM": 245.85,
           "Naive": 1265.14,
           "Seasonal-naive (day)": 627.27,
           "Seasonal-naive (week)": 592.32
         },
         {
           "hour": 9,
-          "LightGBM": 292.51,
+          "LightGBM": 291.75,
           "Naive": 980.34,
           "Seasonal-naive (day)": 668.65,
           "Seasonal-naive (week)": 703.96
         },
         {
           "hour": 10,
-          "LightGBM": 336.64,
+          "LightGBM": 335.87,
           "Naive": 820.63,
           "Seasonal-naive (day)": 745.29,
           "Seasonal-naive (week)": 800.41
         },
         {
           "hour": 11,
-          "LightGBM": 375.44,
+          "LightGBM": 374.05,
           "Naive": 829.44,
           "Seasonal-naive (day)": 826.68,
           "Seasonal-naive (week)": 919.37
         },
         {
           "hour": 12,
-          "LightGBM": 400.68,
+          "LightGBM": 399.25,
           "Naive": 902.62,
           "Seasonal-naive (day)": 1083.73,
           "Seasonal-naive (week)": 1012.45
         },
         {
           "hour": 13,
-          "LightGBM": 411.08,
+          "LightGBM": 407.76,
           "Naive": 951.87,
           "Seasonal-naive (day)": 1108.86,
           "Seasonal-naive (week)": 1055.75
         },
         {
           "hour": 14,
-          "LightGBM": 383.34,
+          "LightGBM": 384.38,
           "Naive": 982.28,
           "Seasonal-naive (day)": 1072.62,
           "Seasonal-naive (week)": 1032.95
         },
         {
           "hour": 15,
-          "LightGBM": 346.4,
+          "LightGBM": 348.63,
           "Naive": 1088.43,
           "Seasonal-naive (day)": 994.03,
           "Seasonal-naive (week)": 946.54
         },
         {
           "hour": 16,
-          "LightGBM": 297.31,
+          "LightGBM": 297.52,
           "Naive": 1475.39,
           "Seasonal-naive (day)": 878.77,
           "Seasonal-naive (week)": 806.5
         },
         {
           "hour": 17,
-          "LightGBM": 253.14,
+          "LightGBM": 253.28,
           "Naive": 2012.06,
           "Seasonal-naive (day)": 767.89,
           "Seasonal-naive (week)": 696.83
         },
         {
           "hour": 18,
-          "LightGBM": 237.65,
+          "LightGBM": 235.46,
           "Naive": 2246.83,
           "Seasonal-naive (day)": 697.6,
           "Seasonal-naive (week)": 627.73
         },
         {
           "hour": 19,
-          "LightGBM": 202.91,
+          "LightGBM": 203.18,
           "Naive": 2119.07,
           "Seasonal-naive (day)": 629.25,
           "Seasonal-naive (week)": 561.01
         },
         {
           "hour": 20,
-          "LightGBM": 183.24,
+          "LightGBM": 186.73,
           "Naive": 1851.81,
           "Seasonal-naive (day)": 545.47,
           "Seasonal-naive (week)": 498.79
         },
         {
           "hour": 21,
-          "LightGBM": 165.07,
+          "LightGBM": 167.58,
           "Naive": 1516.76,
           "Seasonal-naive (day)": 445.79,
           "Seasonal-naive (week)": 436.49
         },
         {
           "hour": 22,
-          "LightGBM": 148.55,
+          "LightGBM": 152.16,
           "Naive": 1210.8,
           "Seasonal-naive (day)": 363.46,
           "Seasonal-naive (week)": 372.23
         },
         {
           "hour": 23,
-          "LightGBM": 135.52,
+          "LightGBM": 138.09,
           "Naive": 1164.15,
           "Seasonal-naive (day)": 308.75,
           "Seasonal-naive (week)": 318.9
@@ -349,14 +349,14 @@
       ],
       "feature_importance": {
         "seasonal_rolling_mean_lag96_season_length48_window_size7": 0.484,
-        "temp_lag_3h": 0.0719,
+        "temp_lag_3h": 0.0718,
         "solar_radiation": 0.0624,
         "is_non_working_day": 0.0537,
-        "lag672": 0.0493,
+        "lag672": 0.0494,
         "temp_max_24h": 0.0371,
-        "lag336": 0.0357,
+        "lag336": 0.0356,
         "temperature": 0.0259,
-        "trend_years": 0.0205,
+        "trend_years": 0.0204,
         "half_hour": 0.0184,
         "cdd": 0.0158,
         "lag96": 0.0135,
@@ -371,12 +371,12 @@
       },
       "headline": {
         "model": "LightGBM",
-        "MASE": 0.48175696106779203,
-        "MAE": 234.42674183176516
+        "MASE": 0.4823239336433712,
+        "MAE": 234.81700823523454
       },
       "aci_alphas": {
-        "80": 0.1608333333333333,
-        "95": -0.004999999999999151
+        "80": 0.15500000000000022,
+        "95": -0.006249999999999123
       },
       "gate": {
         "threshold": 0.6,
@@ -397,15 +397,15 @@
         {
           "model": "LightGBM",
           "origins": 972,
-          "MASE": 0.8158168364578776,
-          "MAE": 43.56193011581275,
-          "RMSE": 288.43795427672137,
-          "pinball80": 12.428270943971446,
-          "coverage80": 0.7981974921630094,
-          "width80": 125.70555218243592,
-          "pinball95": 9.189702533245084,
-          "coverage95": 0.9482105538140021,
-          "width95": 482.08789963080676
+          "MASE": 0.8134825531144556,
+          "MAE": 43.511009518947304,
+          "RMSE": 288.30609637038293,
+          "pinball80": 12.368868464409346,
+          "coverage80": 0.7981539533263671,
+          "width80": 123.71834691114742,
+          "pinball95": 9.260376826867757,
+          "coverage95": 0.9481670149773598,
+          "width95": 488.06480033848476
         },
         {
           "model": "Seasonal-naive (day)",
@@ -451,9 +451,9 @@
         {
           "model": "LightGBM",
           "origins": 139,
-          "MASE": 0.6767821515565509,
-          "MAE": 35.796214596017904,
-          "RMSE": 55.159352330087515
+          "MASE": 0.6739726905013265,
+          "MAE": 35.71135299726512,
+          "RMSE": 55.08762501280157
         },
         {
           "model": "MSTL-ARIMA",
@@ -508,14 +508,14 @@
       "mae_by_hour": [
         {
           "hour": 0,
-          "LightGBM": 33.57,
+          "LightGBM": 33.78,
           "Naive": 74.54,
           "Seasonal-naive (day)": 43.52,
           "Seasonal-naive (week)": 60.62
         },
         {
           "hour": 1,
-          "LightGBM": 32.97,
+          "LightGBM": 33.15,
           "Naive": 69.91,
           "Seasonal-naive (day)": 43.29,
           "Seasonal-naive (week)": 59.74
@@ -529,182 +529,182 @@
         },
         {
           "hour": 3,
-          "LightGBM": 33.32,
+          "LightGBM": 33.34,
           "Naive": 66.31,
           "Seasonal-naive (day)": 43.91,
           "Seasonal-naive (week)": 59.7
         },
         {
           "hour": 4,
-          "LightGBM": 35.07,
+          "LightGBM": 35.0,
           "Naive": 69.5,
           "Seasonal-naive (day)": 45.59,
           "Seasonal-naive (week)": 61.97
         },
         {
           "hour": 5,
-          "LightGBM": 36.99,
+          "LightGBM": 36.77,
           "Naive": 77.36,
           "Seasonal-naive (day)": 48.31,
           "Seasonal-naive (week)": 65.33
         },
         {
           "hour": 6,
-          "LightGBM": 39.01,
+          "LightGBM": 38.57,
           "Naive": 82.49,
           "Seasonal-naive (day)": 53.09,
           "Seasonal-naive (week)": 68.19
         },
         {
           "hour": 7,
-          "LightGBM": 47.89,
+          "LightGBM": 47.33,
           "Naive": 81.41,
           "Seasonal-naive (day)": 70.62,
           "Seasonal-naive (week)": 83.91
         },
         {
           "hour": 8,
-          "LightGBM": 49.45,
+          "LightGBM": 49.18,
           "Naive": 67.93,
           "Seasonal-naive (day)": 74.7,
           "Seasonal-naive (week)": 88.09
         },
         {
           "hour": 9,
-          "LightGBM": 34.65,
+          "LightGBM": 34.72,
           "Naive": 47.85,
           "Seasonal-naive (day)": 48.77,
           "Seasonal-naive (week)": 61.57
         },
         {
           "hour": 10,
-          "LightGBM": 30.07,
+          "LightGBM": 30.12,
           "Naive": 41.44,
           "Seasonal-naive (day)": 41.16,
           "Seasonal-naive (week)": 53.8
         },
         {
           "hour": 11,
-          "LightGBM": 30.06,
+          "LightGBM": 29.84,
           "Naive": 41.22,
           "Seasonal-naive (day)": 41.36,
           "Seasonal-naive (week)": 54.89
         },
         {
           "hour": 12,
-          "LightGBM": 30.57,
+          "LightGBM": 30.26,
           "Naive": 43.22,
           "Seasonal-naive (day)": 52.55,
           "Seasonal-naive (week)": 56.72
         },
         {
           "hour": 13,
-          "LightGBM": 46.56,
+          "LightGBM": 46.36,
           "Naive": 59.21,
           "Seasonal-naive (day)": 82.94,
           "Seasonal-naive (week)": 87.52
         },
         {
           "hour": 14,
-          "LightGBM": 51.64,
+          "LightGBM": 51.43,
           "Naive": 67.09,
           "Seasonal-naive (day)": 93.24,
           "Seasonal-naive (week)": 97.22
         },
         {
           "hour": 15,
-          "LightGBM": 41.51,
+          "LightGBM": 41.6,
           "Naive": 61.18,
           "Seasonal-naive (day)": 71.02,
           "Seasonal-naive (week)": 75.48
         },
         {
           "hour": 16,
-          "LightGBM": 44.1,
+          "LightGBM": 43.88,
           "Naive": 83.59,
           "Seasonal-naive (day)": 75.26,
           "Seasonal-naive (week)": 78.68
         },
         {
           "hour": 17,
-          "LightGBM": 86.81,
+          "LightGBM": 87.1,
           "Naive": 154.28,
           "Seasonal-naive (day)": 159.84,
           "Seasonal-naive (week)": 161.94
         },
         {
           "hour": 18,
-          "LightGBM": 77.98,
+          "LightGBM": 77.81,
           "Naive": 154.44,
           "Seasonal-naive (day)": 137.02,
           "Seasonal-naive (week)": 141.83
         },
         {
           "hour": 19,
-          "LightGBM": 72.57,
+          "LightGBM": 72.63,
           "Naive": 143.8,
           "Seasonal-naive (day)": 129.52,
           "Seasonal-naive (week)": 135.31
         },
         {
           "hour": 20,
-          "LightGBM": 53.17,
+          "LightGBM": 53.33,
           "Naive": 119.01,
           "Seasonal-naive (day)": 92.13,
           "Seasonal-naive (week)": 97.56
         },
         {
           "hour": 21,
-          "LightGBM": 35.74,
+          "LightGBM": 35.81,
           "Naive": 94.17,
           "Seasonal-naive (day)": 57.68,
           "Seasonal-naive (week)": 65.04
         },
         {
           "hour": 22,
-          "LightGBM": 34.19,
+          "LightGBM": 34.34,
           "Naive": 85.21,
           "Seasonal-naive (day)": 54.12,
           "Seasonal-naive (week)": 61.79
         },
         {
           "hour": 23,
-          "LightGBM": 34.69,
+          "LightGBM": 35.0,
           "Naive": 84.6,
           "Seasonal-naive (day)": 54.24,
           "Seasonal-naive (week)": 60.98
         }
       ],
       "feature_importance": {
-        "seasonal_rolling_mean_lag96_season_length48_window_size7": 0.2443,
+        "seasonal_rolling_mean_lag96_season_length48_window_size7": 0.2441,
         "trend_years": 0.0936,
-        "wind_speed": 0.0814,
-        "temp_max_24h": 0.0479,
+        "wind_speed": 0.0813,
+        "temp_max_24h": 0.0476,
         "doy_cos": 0.0438,
-        "doy_sin": 0.0407,
-        "rolling_mean_lag72_window_size336": 0.0392,
+        "doy_sin": 0.0409,
+        "rolling_mean_lag72_window_size336": 0.0394,
         "lag672": 0.0335,
         "lag96": 0.0332,
-        "solar_radiation": 0.029,
-        "rolling_max_lag72_window_size48": 0.0273,
-        "temp_lag_3h": 0.0268,
-        "rolling_mean_lag72_window_size48": 0.0258,
-        "half_hour": 0.0254,
+        "solar_radiation": 0.0289,
+        "rolling_max_lag72_window_size48": 0.0271,
+        "temp_lag_3h": 0.0269,
+        "rolling_mean_lag72_window_size48": 0.026,
+        "half_hour": 0.0256,
         "humidity": 0.0247,
         "rolling_std_lag72_window_size48": 0.0237,
         "temp_lag_24h": 0.0169,
         "day_of_week": 0.0163,
-        "lag336": 0.0152,
-        "cloud_cover": 0.0152
+        "lag336": 0.0153,
+        "cloud_cover": 0.0151
       },
       "headline": {
         "model": "LightGBM",
-        "MASE": 0.8158168364578776,
-        "MAE": 43.56193011581275
+        "MASE": 0.8134825531144556,
+        "MAE": 43.511009518947304
       },
       "aci_alphas": {
-        "80": 0.16999999999999996,
-        "95": 0.022916666666667532
+        "80": 0.16916666666666685,
+        "95": 0.021666666666667545
       }
     }
   }

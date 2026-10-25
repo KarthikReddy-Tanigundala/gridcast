@@ -25,11 +25,11 @@ half-hours, 12.5–36 h ahead. Every weather input is the forecast issued the da
 
 | Target | Model | MASE | MAE | 80% / 95% interval coverage |
 |---|---|---|---|---|
-| Demand | **GridCast LightGBM** | **0.482** | **234 MW** (sMAPE 5.1%) | **0.798 / 0.947** |
+| Demand | **GridCast LightGBM** | **0.482** | **235 MW** (sMAPE 5.1%) | **0.798 / 0.947** |
 | Demand | Seasonal-naive (same half-hour last week) | 1.159 | 583 MW | 0.796 / 0.947 |
 | Demand | Best classical (MSTL-ARIMAX, weekly origins) | 1.285 | 645 MW | — |
 | Demand | NHITS deep learning (weekly origins, CPU budget) | 1.081 | 530 MW | — |
-| Price | **GridCast LightGBM** | **0.816** | **$43.6/MWh** | **0.798 / 0.948** |
+| Price | **GridCast LightGBM** | **0.813** | **$43.5/MWh** | **0.798 / 0.948** |
 | Price | Seasonal-naive (same half-hour yesterday) | 1.231 | $69.1/MWh | — |
 
 The intervals are calibrated: 80% intervals contain the actual value ~80% of the time, measured
@@ -44,9 +44,9 @@ hard to beat on one series, a common finding that is reported as measured.
 
 | Target | GridCast | AEMO PREDISPATCH (≈12:33 run) | 50/50 blend | GridCast wins |
 |---|---|---|---|---|
-| Demand MAE | 245 MW | **203 MW** | **192 MW** | 37% of days |
-| Price MAE | **$29.6** | $85.7 | $50.6 | 56% of days |
-| Price median abs. error | $22.0 | **$16.9** | $17.1 | — |
+| Demand MAE | 245 MW | **203 MW** | **191 MW** | 37% of days |
+| Price MAE | **$29.5** | $85.7 | $50.5 | 57% of days |
+| Price median abs. error | $21.9 | **$16.9** | $16.9 | — |
 
 **Honest reading:**
 - **AEMO wins on demand.** It sees 30 more minutes of data plus dispatch-level inputs. GridCast
@@ -55,7 +55,7 @@ hard to beat on one series, a common finding that is reported as measured.
   day-ahead PD shows RRP > $300 in 4.5% of half-hours against 0.19% that actually clear there. It
   prices tomorrow on *today's* bids, and participants rebid. So it is a dispatch scenario, not a
   statistical forecast, and its mean error is dominated by phantom spikes.
-- **On spikes:** AEMO's PD catches 74% of real ones at 3% precision. GridCast's classifier runs at 33%
+- **On spikes:** AEMO's PD catches 74% of real ones at 3% precision. GridCast's classifier runs at 36%
   precision and 12% recall: the opposite trade-off.
 
 ![GridCast vs AEMO tab](assets/screenshots/aemo_tab.jpg)

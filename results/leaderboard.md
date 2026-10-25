@@ -1,6 +1,6 @@
 # GridCast leaderboard
 
-_Generated 2026-10-20 10:48 UTC by `python -m gridcast.evaluation.backtest`. All numbers are measured out of sample by walk-forward backtesting; nothing is hand-entered._
+_Generated 2026-10-22 01:22 UTC by `python -m gridcast.evaluation.backtest`. All numbers are measured out of sample by walk-forward backtesting; nothing is hand-entered._
 
 **Protocol.** One forecast per day issued at **12:00 AEST** for the whole of the **next day** (48 half-hours, 12.5–36 h ahead) — the day-ahead setting. Expanding-window refits every 28 days; weather inputs are the forecasts issued the day before (no hindsight weather). **MASE** = MAE ÷ in-sample MAE of a same-half-hour-yesterday forecast over the trailing 28 days (< 1 beats that naive rule). Intervals: rolling split-conformal with adaptive (ACI) correction; coverage measured, not assumed.
 
@@ -8,7 +8,7 @@ _Generated 2026-10-20 10:48 UTC by `python -m gridcast.evaluation.backtest`. All
 
 | Model | MASE | MAE | RMSE | sMAPE % | Pinball (80%) | 80% coverage | 95% coverage | 80% width |
 |---|---|---|---|---|---|---|---|---|
-| **LightGBM** | 0.482 | 234 | 329 | 5.06 | 55 | 0.798 | 0.947 | 790 |
+| **LightGBM** | 0.482 | 235 | 329 | 5.07 | 56 | 0.798 | 0.947 | 794 |
 | Seasonal-naive (week) | 1.159 | 583 | 872 | 12.40 | 146 | 0.796 | 0.947 | 2,030 |
 | Seasonal-naive (day) | 1.188 | 590 | 878 | 12.51 | — | — | — | — |
 | Naive | 2.524 | 1,233 | 1,532 | 28.51 | — | — | — | — |
@@ -34,7 +34,7 @@ Gate: LightGBM demand MASE < 0.6 → **PASSED** (0.482).
 
 | Model | MASE | MAE | RMSE | Pinball (80%) | 80% coverage | 95% coverage | 80% width |
 |---|---|---|---|---|---|---|---|
-| **LightGBM** | 0.816 | 43.6 | 288.4 | 12.4 | 0.798 | 0.948 | 125.7 |
+| **LightGBM** | 0.813 | 43.5 | 288.3 | 12.4 | 0.798 | 0.948 | 123.7 |
 | Seasonal-naive (day) | 1.231 | 69.1 | 409.7 | — | — | — | — |
 | Seasonal-naive (week) | 1.384 | 79.1 | 409.4 | 24.2 | 0.801 | 0.948 | 256.8 |
 | Naive | 1.553 | 80.7 | 303.7 | — | — | — | — |
@@ -43,7 +43,7 @@ Gate: LightGBM demand MASE < 0.6 → **PASSED** (0.482).
 
 | Model | MASE | MAE | RMSE |
 |---|---|---|---|
-| LightGBM | 0.677 | 35.8 | 55.2 |
+| LightGBM | 0.674 | 35.7 | 55.1 |
 | MSTL-ARIMA | 1.008 | 57.0 | 114.6 |
 | MSTL-ETS | 1.017 | 57.2 | 114.8 |
 | MSTL-ARIMAX | 1.037 | 59.8 | 115.9 |
@@ -67,14 +67,14 @@ NHITS (neuralforecast, CPU) trained on the trailing 365 days, refitted every 13 
 
 | Classifier | PR-AUC | Precision | Recall | F1 |
 |---|---|---|---|---|
-| GridCast LightGBM classifier | 0.183 | 0.241 | 0.340 | 0.282 |
+| GridCast LightGBM classifier | 0.185 | 0.244 | 0.305 | 0.271 |
 | Climatology (month × half-hour rate) | 0.058 | 0.222 | 0.009 | 0.018 |
 
 On the 17,472 half-hours where AEMO's 12:33 PD run is available (34 spikes):
 
 | Classifier | PR-AUC | Precision | Recall | F1 |
 |---|---|---|---|---|
-| GridCast | 0.227 | 0.333 | 0.118 | 0.174 |
+| GridCast | 0.216 | 0.364 | 0.118 | 0.178 |
 | AEMO PREDISPATCH (RRP > $300) | — | 0.032 | 0.735 | 0.061 |
 
 ## GridCast vs AEMO PREDISPATCH
