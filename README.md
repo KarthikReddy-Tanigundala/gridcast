@@ -10,7 +10,7 @@
 
 | | |
 |---|---|
-| 📈 Live dashboard | _Streamlit Community Cloud link: added once deployed_ |
+| 📈 Live dashboard | **[gridcast-vic.streamlit.app](https://gridcast-vic.streamlit.app/)** (updated daily at 12:35 AEST; the free tier sleeps when idle, so give it ~30 s to wake) |
 | 🏆 Model leaderboard | [results/leaderboard.md](results/leaderboard.md) |
 | ⚖️ GridCast vs AEMO | [results/aemo_benchmark.md](results/aemo_benchmark.md) |
 | 📚 Methodology · Architecture · Errata | [METHODOLOGY.md](METHODOLOGY.md) · [ARCHITECTURE.md](ARCHITECTURE.md) · [CLAUDE.md §16](CLAUDE.md) |
