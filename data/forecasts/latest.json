@@ -1,11 +1,11 @@
 {
-  "issued_at": "2026-11-02 19:51:00",
-  "origin": "2026-11-02 12:00:00",
-  "target_day": "2026-11-03",
+  "issued_at": "2026-11-03 19:56:00",
+  "origin": "2026-11-03 12:00:00",
+  "target_day": "2026-11-04",
   "horizon_steps": 72,
   "direct": true,
-  "weather_issued_at": "2026-11-02 19:00:00",
-  "aemo_run_time": "2026-11-02 12:31:58",
-  "models": "2026-10-22T01:22:58+00:00",
+  "weather_issued_at": "2026-11-03 19:00:00",
+  "aemo_run_time": "2026-11-03 12:32:31",
+  "models": "2026-11-03T09:55:56+00:00",
   "timezone": "AEST (UTC+10, no DST), interval-ending"
 }
